@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="application-name" content="EventSphere">
+    <meta name="apple-mobile-web-app-title" content="EventSphere">
+    <meta property="og:site_name" content="EventSphere">
+    <meta property="og:title" content="EventSphere | Premium Event Tickets">
+    <meta property="og:url" content="https://www.eventsphere.site/">
+    <meta property="og:type" content="website">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>EventSphere | Premium Events At 0% Fees</title>
+    <link rel="icon" type="image/png" href="logo.jpg">
+    <!-- Razorpay Checkout Script -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <style>
+        /* ================= 🎬 ULTRA-PREMIUM TICKET DROP INTRO 🎬 ================= */
+        #splash-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+            background: radial-gradient(circle at center, #111 0%, #000 100%);
+            z-index: 99999; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; overflow: hidden;
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .intro-ticket {
+            width: 200px; height: 100px;
+            background: radial-gradient(circle at right, #D4AF37 0%, #8A6E27 100%);
+            border-radius: 12px; position: relative;
+            display: flex; align-items: center; justify-content: center;
+            border: 2px solid #F5D76E;
+            box-shadow: 0 15px 35px rgba(212, 175, 55, 0.6), inset 0 0 15px rgba(255,255,255,0.4);
+            animation: dropTicket 1s cubic-bezier(0.25, 1, 0.5, 1) forwards, floatTicket 2s ease-in-out infinite alternate 1s;
+            opacity: 0; margin-bottom: 25px; overflow: hidden;
+        }
+        
+        .intro-ticket::before, .intro-ticket::after {
+            content: ''; position: absolute; width: 24px; height: 24px;
+            background: #050505; border-radius: 50%;
+            top: 50%; transform: translateY(-50%); box-shadow: inset 0 0 8px rgba(0,0,0,0.9); z-index: 5;
+        }
+        .intro-ticket::before { left: -12px; }
+        .intro-ticket::after { right: -12px; }
+        
+        .rangoli {
+            position: absolute; color: rgba(0,0,0,0.3); font-size: 32px; line-height: 1;
+            animation: spinRangoli 4s ease-out forwards;
+        }
+        .r-tl { top: -4px; left: 16px; } .r-tr { top: -4px; right: 16px; }
+        .r-bl { bottom: -4px; left: 16px; } .r-br { bottom: -4px; right: 16px; }
+
+        @keyframes spinRangoli { 
+            0% { transform: rotate(0deg) scale(0.5); opacity: 1; } 
+            80% { transform: rotate(720deg) scale(1.2); opacity: 0.8; } 
+            100% { transform: rotate(1080deg) scale(1); opacity: 0; } 
+        }
+
+        .intro-ticket-content { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 0 25px; z-index: 2; }
+        .intro-text-side { display: flex; flex-direction: column; text-align: left; }
+        .intro-text-side span.bold { font-size: 13px; color: #000; font-weight: 900; letter-spacing: 1px; line-height: 1.2; text-shadow: 0 1px 2px rgba(255,255,255,0.4); }
+        .intro-text-side span.sub { font-size: 10px; color: #111; font-weight: bold; letter-spacing: 3px; margin-top: 2px;}
+
+        .intro-qr-corner {
+            width: 50px; height: 50px; border: 2px solid #000; border-radius: 6px;
+            background: #fff; padding: 3px; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+        }
+        .intro-qr-corner img { width: 100%; height: 100%; object-fit: contain; }
+
+        .cinematic-text {
+            font-size: 30px; font-weight: 900; margin: 0;
+            background: linear-gradient(45deg, #fff, #D4AF37, #F5D76E);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-transform: uppercase; letter-spacing: 15px; opacity: 0; filter: blur(10px);
+            animation: textRevealPremium 1.2s cubic-bezier(0.2, 0, 0.2, 1) 0.6s forwards;
+            position: relative; z-index: 1; text-align: center;
+        }
+
+        .intro-slogan {
+            color: var(--gold-light); font-size: 10px; font-weight: bold; letter-spacing: 3px;
+            text-transform: uppercase; margin-top: 10px; opacity: 0;
+            animation: sloganReveal 1s ease 1s forwards; text-align: center;
+        }
+
+        @keyframes dropTicket { 0% { transform: translateY(-100vh) rotate(-30deg) scale(1.5); opacity: 0; } 60% { transform: translateY(20px) rotate(10deg) scale(0.9); opacity: 1; } 100% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; } }
+        @keyframes floatTicket { 0% { transform: translateY(0) rotate(0deg); box-shadow: 0 15px 35px rgba(212,175,55,0.6); } 100% { transform: translateY(-8px) rotate(2deg); box-shadow: 0 25px 45px rgba(212,175,55,0.9); } }
+        @keyframes textRevealPremium { 0% { opacity: 0; letter-spacing: 25px; filter: blur(15px); transform: translateY(15px); } 100% { opacity: 1; letter-spacing: 4px; filter: blur(0); transform: translateY(0); } }
+        @keyframes sloganReveal { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 0.9; transform: translateY(0); } }
+        /* ================= END CINEMATIC SPLASH ================= */
+
+        /* ================= BASE STYLES & THEME ================= */
+        :root { --bg-dark: #020202; --bg-card: #111111; --gold: #D4AF37; --gold-light: #F5D76E; --text-main: #FFFFFF; --text-muted: #888888; --success: #00e676; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-dark); color: var(--text-main); margin: 0; padding: 0; padding-bottom: 80px; overflow-x: hidden; }
+
+        .view-section { display: none; animation: fadeIn 0.3s ease-in-out; }
+        .active-view { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ================= HEADER ================= */
+        header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; position: sticky; top: 0; background: rgba(2, 2, 2, 0.9); backdrop-filter: blur(12px); z-index: 100; border-bottom: 1px solid rgba(212, 175, 55, 0.1); }
+        .brand h1 { margin: 0; font-size: 18px; font-weight: 900; background: linear-gradient(45deg, var(--gold-light), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px; }
+        .header-right { display: flex; align-items: center; gap: 8px; }
+        .city-select-btn, .my-tickets-top-btn { color: #fff; font-size: 11px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 4px; background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 20px; border: 1px solid rgba(212,175,55,0.2); }
+        .city-select-btn small { color: var(--gold); font-size: 8px; }
+
+        /* ================= GLOWING TITLE & PRICE ================= */
+        .glowing-title { text-align: left; padding: 0 16px; color: var(--gold); font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; margin: 0 auto 10px auto; max-width: 1200px; animation: glowText 1.5s infinite alternate; }
+        @keyframes glowText { from { text-shadow: 0 0 2px var(--gold-light), 0 0 5px var(--gold); } to { text-shadow: 0 0 10px var(--gold-light), 0 0 20px var(--gold); } }
+
+        .glowing-price { color: var(--gold); font-weight: bold; margin-top: 2px; font-size: 10px; animation: priceGlow 1.5s infinite alternate; }
+        @keyframes priceGlow { from { text-shadow: 0 0 1px var(--gold-light); } to { text-shadow: 0 0 8px var(--gold); } }
+
+        /* ================= SLIDER & GRID ================= */
+        .promo-slider-container { width: 100%; padding: 10px 0 0 0; position: relative; max-width: 1200px; margin: 0 auto; }
+        .promo-slider { 
+            display: grid; grid-auto-flow: column; grid-auto-columns: calc((100% - 12px) / 2); 
+            gap: 12px; padding: 5px 16px 15px 16px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; 
+        }
+        .promo-slider::-webkit-scrollbar { display: none; }
+        .promo-slider .event-card { scroll-snap-align: start; width: 100%; }
+
+        @media (min-width: 600px) { .promo-slider { grid-auto-columns: calc((100% - 24px) / 3); gap: 12px; } .event-list { grid-template-columns: repeat(3, 1fr) !important; } }
+        @media (min-width: 900px) { .promo-slider { grid-auto-columns: calc((100% - 48px) / 4); gap: 16px; } .event-list { grid-template-columns: repeat(4, 1fr) !important; } }
+        @media (min-width: 1200px) { .promo-slider { grid-auto-columns: calc((100% - 64px) / 5); gap: 16px; } .event-list { grid-template-columns: repeat(5, 1fr) !important; } }
+
+        .slider-dots { display: flex; justify-content: center; gap: 4px; margin-top: 0px; margin-bottom: 8px; }
+        .dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.2); transition: all 0.3s ease; }
+        .dot.active-dot { background: var(--gold); width: 14px; border-radius: 8px; box-shadow: 0 0 6px var(--gold); }
+
+        .category-scroll { display: flex; gap: 8px; padding: 5px 16px; overflow-x: auto; scrollbar-width: none; max-width: 1200px; margin: 0 auto;}
+        .category-scroll::-webkit-scrollbar { display: none; }
+        .chip { background: transparent; color: var(--text-muted); border: 1px solid rgba(255,255,255,0.1); padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 500; white-space: nowrap; cursor: pointer; transition: all 0.3s; }
+        .chip.active { background: var(--gold); color: #000; border-color: var(--gold); font-weight: bold; }
+
+        .section-title { padding: 12px 16px 6px 16px; font-size: 15px; font-weight: 900; color: #fff; letter-spacing: 0.5px; max-width: 1200px; margin: 0 auto; text-transform: uppercase; }
+        .event-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 5px 16px 20px 16px; max-width: 1200px; margin: 0 auto; }
+        
+        .event-card { 
+            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); border-radius: 8px; 
+            overflow: hidden; position: relative; cursor: pointer; display: flex; flex-direction: column; 
+            border: 1px solid rgba(212, 175, 55, 0.2); box-shadow: 0 4px 10px rgba(0,0,0,0.3); 
+            transition: transform 0.2s; width: 100%; box-sizing: border-box; 
+        }
+        .event-card:active { transform: scale(0.96); } 
+        .event-img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 8px 8px 0 0; }
+        .event-details { padding: 8px 8px; flex: 1; display: flex; flex-direction: column; justify-content: flex-start; }
+        .event-title { color: #fff; font-size: 12px; font-weight: 900; margin: 0 0 4px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.3;}
+        .event-info { color: var(--text-muted); font-size: 10px; margin-bottom: 0; display: flex; flex-direction: column; gap: 3px; font-weight: 500;}
+        .event-info span { display: flex; align-items: center; gap: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        
+        .date-badge { position: absolute; top: 6px; right: 6px; background: rgba(0,0,0,0.85); color: var(--gold); padding: 3px 6px; border-radius: 4px; font-weight: bold; font-size: 8px; border: 1px solid rgba(212, 175, 55, 0.5); backdrop-filter: blur(5px); text-transform: uppercase; z-index: 10; }
+        .share-btn { position: absolute; top: 6px; left: 6px; background: rgba(0,0,0,0.85); color: var(--gold); width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; border: 1px solid rgba(212, 175, 55, 0.5); backdrop-filter: blur(5px); z-index: 10; cursor: pointer; transition: 0.2s; }
+        .share-btn:active { transform: scale(0.9); }
+
+        /* CONTAINERS & CHECKOUT */
+        .profile-container { padding: 16px; max-width: 600px; margin: 0 auto; }
+        .search-box { position: relative; margin-bottom: 20px; max-width: 600px; margin: 0 auto 20px auto; }
+        .search-box .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); font-size: 14px; }
+        .search-box input { width: 100%; padding: 12px 15px 12px 40px; background-color: var(--bg-card); border: 1px solid rgba(212, 175, 55, 0.3); color: #fff; border-radius: 10px; box-sizing: border-box; font-size: 13px; outline: none; }
+
+        .checkout-header { display: flex; align-items: center; padding: 12px 16px; background: var(--bg-card); border-bottom: 1px solid rgba(212, 175, 55, 0.2); position: sticky; top: 0; z-index: 100; max-width: 600px; margin: 0 auto;}
+        .checkout-container { padding: 16px; padding-bottom: 100px; max-width: 600px; margin: 0 auto;}
+        .checkout-bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; width: 100%; max-width: 600px; margin: 0 auto; background: var(--bg-card); border-top: 1px solid var(--gold); padding: 12px 16px; box-sizing: border-box; display: flex; justify-content: space-between; align-items: center; z-index: 200; border-radius: 12px 12px 0 0;}
+        
+        .checkout-box { background: var(--bg-card); border: 1px solid rgba(255,255,255,0.05); border-radius: 10px; padding: 16px; margin-bottom: 15px; }
+        .checkout-box h3 { margin: 0 0 10px 0; font-size: 13px; color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; text-transform: uppercase;}
+        .date-scroll { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; padding-bottom: 5px; margin-top: 8px;}
+        .date-scroll::-webkit-scrollbar { display: none; }
+        .date-box { background: #000; border: 1px solid rgba(212,175,55,0.3); border-radius: 8px; padding: 10px 12px; min-width: 45px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; }
+        .date-box.active { background: var(--gold); border-color: var(--gold); box-shadow: 0 4px 12px rgba(212,175,55,0.3); }
+        .date-box .db-day { font-size: 9px; color: var(--text-muted); text-transform: uppercase; font-weight: bold;}
+        .date-box.active .db-day { color: #555; }
+        .date-box .db-date { font-size: 18px; font-weight: 900; color: #fff; }
+        .date-box.active .db-date { color: #000; }
+        .date-box .db-month { font-size: 9px; color: #ccc; text-transform: uppercase; font-weight: bold;}
+        .date-box.active .db-month { color: #333; }
+        
+        .qty-controls { display: flex; align-items: center; gap: 12px; }
+        .qty-btn { width: 28px; height: 28px; border-radius: 6px; background: #333; color: #fff; border: 1px solid var(--gold); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center;}
+        .addon-item { display: flex; justify-content: space-between; align-items: center; background: #000; border: 1px solid rgba(255,255,255,0.1); padding: 12px; border-radius: 8px; margin-bottom: 8px; }
+        .promo-flex { display: flex; gap: 8px; }
+        .promo-flex input { flex: 1; padding: 10px; background: #000; border: 1px solid rgba(212,175,55,0.3); color: #fff; border-radius: 6px; text-transform: uppercase; outline:none; font-size:12px;}
+        .promo-flex button { background: var(--gold); color: #000; border: none; padding: 0 16px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; }
+        .bill-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 12px; color: #ccc; }
+        .bill-total { display: flex; justify-content: space-between; margin-top: 12px; padding-top: 12px; border-top: 1px dashed rgba(212, 175, 55, 0.3); font-size: 16px; font-weight: bold; color: #fff; }
+
+        /* Forms & Inputs */
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 6px; color: var(--gold-light); font-size: 10px; font-weight: 600; text-transform: uppercase;}
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 12px; background-color: var(--bg-card); border: 1px solid rgba(212, 175, 55, 0.2); color: #fff; border-radius: 8px; box-sizing: border-box; font-size: 13px; outline: none; }
+        .submit-btn { background: var(--gold); color: #000; border: none; padding: 12px; width: 100%; font-size: 14px; font-weight: bold; border-radius: 8px; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
+
+        /* Bottom Navigation */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; width: 100%; max-width: 600px; margin: 0 auto; background: rgba(2, 2, 2, 0.95); backdrop-filter: blur(10px); display: flex; justify-content: space-around; padding: 8px 0; border-top: 1px solid rgba(255,255,255,0.05); z-index: 100; border-radius: 20px 20px 0 0;}
+        .nav-item { color: var(--text-muted); text-align: center; font-size: 9px; cursor: pointer; display: flex; flex-direction: column; gap: 2px; flex: 1; }
+        .nav-item.active { color: var(--gold); }
+        .nav-icon { font-size: 16px; }
+
+        /* Modals */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 2000; align-items: center; justify-content: center; }
+        
+        #detailsModal { align-items: center; justify-content: center; }
+        
+        .bms-responsive-layout { display: flex; flex-direction: column; width: 100%; }
+        .bms-left { display: flex; flex-direction: column; flex: 1; overflow-y: auto; }
+        .bms-right { background: var(--bg-card); border-top: 1px solid rgba(255,255,255,0.1); }
+        .bms-right .modal-meta-box { margin: 0; border: none; border-radius: 0; background: transparent; padding: 12px 16px 0 16px; }
+
+        .close-btn-bms { position: absolute; top: 12px; left: 12px; background: rgba(0,0,0,0.6); color: #fff; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; cursor: pointer; z-index: 10; border: 1px solid rgba(255,255,255,0.2); }
+        .modal-img-container { position: relative; width: 100%; height: 220px; flex-shrink: 0; }
+        .modal-img { width: 100%; height: 100%; object-fit: cover; }
+        .modal-scroll-area { flex: 1; overflow-y: auto; padding: 16px; padding-bottom: 40px; }
+        .modal-scroll-area h2 { margin: 0 0 8px 0; color: #fff; font-size: 22px; font-weight: 900; line-height: 1.2;}
+        .tags-row { display: flex; gap: 6px; margin-bottom: 15px; }
+        .tag-pill { background: rgba(212,175,55,0.1); color: var(--gold); padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: bold; border: 1px solid rgba(212,175,55,0.3); }
+        .modal-meta-box { background: var(--bg-card); padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 20px;}
+        .modal-meta-box p { margin: 0 0 10px 0; font-size: 12px; color: var(--text-muted); display: flex; align-items: flex-start; gap: 8px; }
+        .icon-meta { font-size: 16px; color: var(--gold); }
+
+        .sticky-book-bar { background: var(--bg-card); padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; }
+        .price-text { color: #fff; font-size: 15px; font-weight: bold; }
+        .price-sub { font-size: 9px; color: var(--gold); display: block; }
+        .book-action-btn { background: linear-gradient(90deg, #BF953F, #FCF6BA, #B38728); color: #000; border: none; padding: 10px 25px; border-radius: 8px; font-weight: 900; font-size: 14px; cursor: pointer; text-transform: uppercase; box-shadow: 0 4px 12px rgba(212,175,55,0.4); }
+
+        .modal-content-standard { background: var(--bg-card); width: 90%; max-width: 360px; border-radius: 12px; overflow: hidden; border: 1px solid var(--gold); position: relative; padding: 16px;}
+        .close-btn { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.6); color: #fff; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; z-index: 10; }
+        
+        .bottom-sheet { align-items: flex-end; }
+        .bottom-sheet .modal-content-standard { width: 100%; max-width: 400px; border-radius: 20px 20px 0 0; border: none; border-top: 2px solid var(--gold); padding-bottom: 20px; margin: 0 auto; }
+        .sheet-header { padding: 5px 0 10px 0; border-bottom: 1px solid rgba(255,255,255,0.1); text-align: center; font-size: 15px; font-weight: bold; color: var(--gold); margin-bottom: 12px;}
+        .ticket-list { max-height: 50vh; overflow-y: auto; }
+        .ticket-item { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 10px; margin-bottom: 10px; border: 1px solid rgba(212,175,55,0.2); }
+        .ticket-name { font-size: 14px; font-weight: bold; margin: 0; color: #fff; }
+        .ticket-price { color: var(--gold-light); font-size: 12px; margin: 4px 0 0 0; }
+        .add-btn { background: transparent; border: 2px solid var(--gold); color: var(--gold); padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: bold; cursor: pointer; }
+
+        /* City Modal */
+        .city-modal-content { background: var(--bg-dark); width: 100%; height: 100vh; position: fixed; top: 100vh; left: 0; z-index: 4000; transition: transform 0.3s ease-out; display: flex; flex-direction: column; }
+        .city-modal-content.show { transform: translateY(-100vh); }
+        @media (min-width: 768px) {
+            .city-modal-content { max-width: 450px; left: 50%; transform: translate(-50%, 100vh); height: 80vh; border-radius: 20px 20px 0 0; top: auto; bottom: 0; border: 2px solid var(--gold); border-bottom: none;}
+            .city-modal-content.show { transform: translate(-50%, 0); }
+        }
+        .city-header { padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 12px; background: var(--bg-card); border-radius: 20px 20px 0 0;}
+        .city-search-input { flex: 1; background: transparent; border: none; color: #fff; font-size: 14px; outline: none; }
+        .city-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 16px; text-align: center; overflow-y: auto;}
+        .city-item { background: var(--bg-card); border: 1px solid rgba(255,255,255,0.05); padding: 12px 5px; border-radius: 10px; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px;}
+        .city-item:active { background: rgba(212, 175, 55, 0.2); border-color: var(--gold); }
+        .city-icon { font-size: 20px; }
+        .city-name { font-size: 10px; color: #fff; font-weight: 500;}
+
+        .site-footer { background: #000; border-top: 1px solid rgba(212, 175, 55, 0.2); padding: 16px; text-align: center; margin-top: 25px; padding-bottom: 80px; }
+        .footer-links { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+        .footer-links span { color: var(--gold-light); font-size: 10px; cursor: pointer; text-decoration: underline; }
+        .footer-text { color: var(--text-muted); font-size: 9px; }
+
+        /* ================= 🚀 BMS RESPONSIVE MEDIA QUERIES 🚀 ================= */
+        @media (max-width: 600px) {
+            #detailsModal { align-items: flex-end; }
+            #detailsModal .modal-content { height: 90vh; border-radius: 16px 16px 0 0; margin: 0; max-width: 100%; border: none; border-top: 2px solid var(--gold); background: var(--bg-dark); }
+            .bms-responsive-layout { height: 100%; }
+        }
+
+        @media (min-width: 768px) {
+            #detailsModal .modal-content.bms-responsive-layout {
+                max-width: 100%; width: 100vw; height: 100vh; flex-direction: row; background: var(--bg-dark); border-radius: 0; border: none; overflow: hidden;
+            }
+            .bms-left { flex: 6; border-right: 1px solid rgba(255,255,255,0.05); padding: 20px 50px; }
+            .bms-right { flex: 4; border-top: none; padding: 40px 50px; display: flex; flex-direction: column; justify-content: center; background: #080808; }
+            .bms-right .modal-meta-box { background: var(--bg-card); border: 1px solid var(--gold); border-radius: 12px; padding: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
+            .bms-right .sticky-book-bar { background: transparent; border: none; padding: 24px 0 0 0; display: flex; flex-direction: column; align-items: flex-start; gap: 15px; }
+            .bms-right .book-action-btn { width: 100%; padding: 15px; font-size: 16px; }
+            .modal-img-container { padding: 0 0 25px 0; height: auto; max-height: 60vh; background: transparent; }
+            .modal-img { border-radius: 16px; width: 100%; height: 100%; max-height: 55vh; object-fit: cover; }
+            .close-btn-bms { top: 25px; left: 25px; background: rgba(0,0,0,0.8); width: 45px; height: 45px; font-size: 20px; position: fixed; z-index: 100; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= 🎬 INTRO SCREEN ================= -->
+    <div id="splash-screen">
+        <div class="intro-ticket">
+            <span class="rangoli r-tl">❊</span>
+            <span class="rangoli r-tr">❊</span>
+            <span class="rangoli r-bl">❊</span>
+            <span class="rangoli r-br">❊</span>
+            <div class="intro-ticket-content">
+                <div class="intro-text-side">
+                    <span class="bold">INDIA'S 1ST</span>
+                    <span class="sub">TICKETING</span>
+                </div>
+                <div class="intro-qr-corner">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=EventSphereVIP" alt="QR">
+                </div>
+            </div>
+        </div>
+        <h1 class="cinematic-text">EVENTSPHERE</h1>
+        <p class="intro-slogan">Gujarat's Zero-Cost Ticketing Platform</p>
+    </div>
+
+    <!-- HEADER -->
+    <header>
+        <div class="brand"><h1>EventSphere</h1></div>
+        <div class="header-right">
+            <div class="city-select-btn" onclick="openCityModal()">
+                <span id="selectedCityText">Ahmedabad</span> <small>▼</small>
+            </div>
+            <div class="my-tickets-top-btn" onclick="openMyTicketsModal()">
+                🎟️ My Tickets
+            </div>
+        </div>
+    </header>
+
+    <!-- ================= 1. HOME VIEW ================= -->
+    <div id="homeView" class="view-section active-view">
+        <div class="promo-slider-container">
+            <h2 class="glowing-title">✨ Popular Events ✨</h2>
+            <div class="promo-slider" id="autoPromoSlider"></div>
+        </div>
+        <div class="slider-dots" id="promoSliderDots"></div>
+
+        <div class="category-scroll">
+            <button class="chip active" onclick="filterCategory('All', this)">All</button>
+            <button class="chip" onclick="filterCategory('Garba', this)">Garba</button>
+            <button class="chip" onclick="filterCategory('Music', this)">Music</button>
+            <button class="chip" onclick="filterCategory('Events', this)">Events</button>
+            <button class="chip" onclick="filterCategory('Comedy', this)">Comedy</button>
+            <button class="chip" onclick="switchTab('diningView', 'navDining')">Dining 🍽️</button>
+            <button class="chip" onclick="filterCategory('Shows', this)">Shows</button>
+            <button class="chip" onclick="filterCategory('Live', this)">Live</button>
+        </div>
+
+        <div class="section-title">Premium Events</div>
+        <div class="event-list" id="eventList">
+            <p style="text-align:center; color:var(--text-muted); font-size:13px; margin-top:20px; grid-column: 1 / -1;">Loading events...</p>
+        </div>
+    </div>
+
+    <!-- ================= DINING VIEW ================= -->
+    <div id="diningView" class="view-section">
+        <div class="profile-container" style="padding-bottom: 5px;">
+            <h2 style="color: var(--gold); margin-top: 0; margin-bottom: 5px;">Dining & Restaurants</h2>
+            <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 10px;">Exclusive tables and zero commission bookings.</p>
+        </div>
+        <div class="event-list" id="diningList"></div>
+    </div>
+
+    <!-- ================= EXPLORE VIEW ================= -->
+    <div id="exploreView" class="view-section">
+        <div class="profile-container">
+            <h2 style="color: var(--gold); margin-top: 0; margin-bottom: 5px;">Explore Events</h2>
+            <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 20px;">Find your favorite garba, shows, and concerts.</p>
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="Search events, venues..." onkeyup="performSearch()">
+            </div>
+        </div>
+        <div class="event-list" id="searchResultsList"></div>
+    </div>
+
+    <!-- ================= PROFILE / BMS ACCOUNT VIEW ================= -->
+    <div id="hostView" class="view-section">
+        <div class="profile-container">
+            <div class="checkout-box" style="text-align: center; margin-bottom: 20px;">
+                <div style="font-size: 32px; margin-bottom: 8px;">👤</div>
+                <h3 style="color:#fff; font-size:15px; margin-bottom: 4px;">Welcome to EventSphere</h3>
+                <p style="font-size: 11px; color:var(--text-muted); margin-bottom: 15px;">Login to manage your bookings and passes</p>
+                <button class="submit-btn" onclick="triggerOtpLoginModal()">Login / Register via WhatsApp OTP</button>
+            </div>
+
+            <div class="checkout-box">
+                <h3>Quick Actions</h3>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div onclick="openMyTicketsModal()" style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: #000; border-radius: 8px; cursor: pointer; border: 1px solid rgba(212,175,55,0.2);">
+                        <span style="font-size: 13px; font-weight: bold; color: #fff;">🎟️ My Booked Passes & QR</span>
+                        <span style="color: var(--gold);">➔</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="checkout-box" style="margin-top: 20px;">
+                <h3>List Your Event (Organizer Portal)</h3>
+                <form onsubmit="submitEventToWhatsApp(event)" style="margin-top: 12px;">
+                    <div class="form-group"><label>Organizer Name / Business</label><input type="text" name="Organizer_Name" placeholder="Enter name" required></div>
+                    <div class="form-group"><label>Mobile Number</label><input type="tel" name="Mobile_Number" placeholder="Enter 10-digit number" required></div>
+                    <div class="form-group"><label>Event Title</label><input type="text" name="Event_Title" placeholder="e.g. Neon Nights Concert" required></div>
+                    <div class="form-group">
+                        <label>Select District (Gujarat)</label>
+                        <select name="District" required>
+                            <option value="" disabled selected>Choose city/district</option>
+                            <option value="Ahmedabad">Ahmedabad</option>
+                            <option value="Gandhinagar">Gandhinagar</option>
+                            <option value="Surat">Surat</option>
+                            <option value="Rajkot">Rajkot</option>
+                            <option value="Vadodara">Vadodara</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Exact Venue Address</label><textarea name="Venue_Address" rows="2" placeholder="Ground name, Hall, or Theater" required></textarea></div>
+                    <div class="form-group"><label>Event Details / Ticket Pricing</label><textarea name="Event_Details" rows="3" placeholder="Mention ticket price, time..." required></textarea></div>
+                    <button type="submit" class="submit-btn">Send Inquiry to WhatsApp 💬</button>
+                </form>
+            </div>
+
+            <div class="checkout-box" style="margin-top: 20px;">
+                <h3>Help & Support</h3>
+                <div style="font-size: 12px; color: #ccc; line-height: 1.6;">
+                    <p style="margin: 6px 0;">❓ <b>How do I access my tickets?</b><br>Click on 'My Tickets' in the header to view your pass IDs and QR codes.</p>
+                    <p style="margin: 6px 0;">📞 <b>Customer Support:</b><br>Reach out to us directly via WhatsApp support for instant resolution.</p>
+                </div>
+                <button class="submit-btn" style="background: transparent; border: 1px solid var(--gold); color: var(--gold); margin-top: 10px;" onclick="window.open('https://wa.me/918735840340?text=Hi%20EventSphere%20Support', '_blank')">Contact WhatsApp Support 💬</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= FULL PAGE ORDER SUMMARY / CHECKOUT VIEW ================= -->
+    <div id="checkoutView" class="view-section" style="padding-bottom: 0;">
+        <div class="checkout-header">
+            <div class="back-btn-chk" onclick="switchTab('homeView', 'navHome')" style="cursor:pointer; color:var(--gold); font-weight:bold;">❮ Back</div>
+            <h2 class="checkout-title" style="margin:0 auto; font-size:16px; color:#fff;">Order Summary</h2>
+        </div>
+        
+        <div class="checkout-container">
+            <h2 id="chk-event-name" style="margin-top:0; color: #fff; font-size: 20px;">Event Name</h2>
+            <p id="chk-event-meta" style="color: var(--gold); font-size: 12px; margin-top: -8px; margin-bottom: 15px; font-weight: bold;">Date | Time • Category</p>
+
+            <div class="checkout-box" id="chk-date-container" style="display: none;">
+                <h3>Select Date</h3>
+                <div class="date-scroll" id="chk-date-select"></div>
+            </div>
+
+            <div class="checkout-box">
+                <h3>Select Quantity</h3>
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <span style="font-size: 13px; color: #ccc;">Number of Tickets</span>
+                    <div class="qty-controls">
+                        <button class="qty-btn" onclick="updateChkQty(-1)">-</button>
+                        <span id="chk-qty" style="font-size: 18px; font-weight: bold; color: #fff; width: 20px; text-align:center;">1</span>
+                        <button class="qty-btn" style="background:var(--gold); color:#000; border:none;" onclick="updateChkQty(1)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="checkout-box" id="chk-addons-container" style="display: none;"></div>
+
+            <div class="checkout-box">
+                <h3>Offers & Promos</h3>
+                <div class="promo-flex">
+                    <input type="text" id="chk-promo-code" placeholder="Enter GARBA50">
+                    <button onclick="applyChkPromo()">Apply</button>
+                </div>
+                <p id="chk-promo-msg" style="font-size: 11px; color: var(--success); font-weight:bold; margin: 8px 0 0 0; display: none;">Promo applied!</p>
+            </div>
+
+            <div class="checkout-box">
+                <h3>Billing Details</h3>
+                <div class="bill-row"><span>Ticket Price (<span id="chk-bill-qty">1</span>x)</span> <span id="chk-bill-base">₹0</span></div>
+                <div class="bill-row" id="chk-row-addon" style="display:none;"><span>Add-ons</span> <span id="chk-bill-addon">₹0</span></div>
+                <div class="bill-row"><span>Platform Fee</span> <span style="color:#fff;">₹20</span></div>
+                <div class="bill-row" id="chk-row-discount" style="display:none; color: var(--success);"><span>Discount Applied</span> <span id="chk-bill-discount">-₹0</span></div>
+                
+                <div class="bill-total">
+                    <span>Total Est.</span>
+                    <span id="chk-bill-total" style="color: var(--gold); font-size: 18px;">₹0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="checkout-bottom-bar">
+            <div>
+                <div style="font-size: 10px; color: var(--text-muted);">Total Amount</div>
+                <div id="chk-bottom-total" style="font-size: 20px; font-weight: bold; color: #fff;">₹0</div>
+            </div>
+            <button class="book-action-btn" onclick="payWithRazorpay()">Pay via Razorpay 🔒</button>
+        </div>
+    </div>
+
+    <!-- ================= MODALS ================= -->
+    
+    <!-- BMS STYLE OTP / MOBILE VERIFICATION MODAL -->
+    <div id="otpModal" class="modal-overlay">
+        <div class="modal-content-standard" style="max-width: 380px; text-align: left;">
+            <div class="close-btn" onclick="closeModal('otpModal')">✕</div>
+            <div class="sheet-header" style="text-align: left; border:none; margin-bottom:4px;">Verify Mobile Number</div>
+            <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 15px;">We will send a 4-digit verification code to proceed with booking.</p>
+            
+            <div id="phoneInputStep">
+                <div class="form-group">
+                    <label>WhatsApp / Mobile Number</label>
+                    <input type="tel" id="userMobileInput" placeholder="Enter 10-digit number" maxlength="10">
+                </div>
+                <button class="submit-btn" onclick="sendOtpCode()">Send OTP 📱</button>
+            </div>
+
+            <div id="otpInputStep" style="display: none;">
+                <div class="form-group">
+                    <label>Enter 4-Digit OTP</label>
+                    <input type="text" id="otpCodeInput" placeholder="e.g. 1234" maxlength="4">
+                </div>
+                <button class="submit-btn" onclick="verifyOtpCode()">Verify & Proceed 🚀</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CITY MODAL -->
+    <div id="cityModal" class="city-modal-content">
+        <div class="city-header">
+            <div class="close-btn-bms" onclick="closeCityModal()" style="position: static; width: 30px; height: 30px; background: transparent; border: none; font-size: 22px; color: var(--gold);">❮</div>
+            <input type="text" class="city-search-input" id="citySearchInput" placeholder="Search for your city..." onkeyup="filterCities()">
+        </div>
+        <p style="padding: 15px 16px 0 16px; color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0;">Popular Cities</p>
+        <div class="city-grid" id="cityGrid"></div>
+    </div>
+
+    <!-- EVENT DETAILS MODAL -->
+    <div id="detailsModal" class="modal-overlay">
+        <div class="modal-content bms-responsive-layout">
+            <div class="close-btn-bms" onclick="closeModal('detailsModal')">❮</div>
+            
+            <div class="bms-left">
+                <div class="modal-img-container"><img id="detailImg" class="modal-img" src="" alt="Event Cover"></div>
+                <div class="modal-scroll-area">
+                    <h2 id="detailTitle">Event Title</h2>
+                    <div class="tags-row"><div class="tag-pill">Premium Event</div><div class="tag-pill">Fast Filling</div></div>
+                    <h3 style="color: var(--gold); margin-bottom: 10px; font-size: 13px; text-transform: uppercase;">About Event</h3>
+                    <p id="detailDescription" style="color: #ccc; font-size: 12px; line-height: 1.5; margin-bottom: 20px;"></p>
+                </div>
+            </div>
+
+            <div class="bms-right">
+                <div class="modal-meta-box">
+                    <p><span class="icon-meta">📍</span> <span>Venue:</span> <span id="detailVenue" style="color:#fff; font-weight:normal;"></span></p>
+                    <p><span class="icon-meta">🕒</span> <span>Time:</span> <span id="detailTime" style="color:#fff; font-weight:normal;"></span></p>
+                    <p><span class="icon-meta">⏳</span> <span>Duration:</span> <span id="detailDuration" style="color:#fff; font-weight:normal;"></span></p>
+                </div>
+                <div class="sticky-book-bar">
+                    <div><span class="price-text" id="detailPriceStart">₹499 onwards</span><span class="price-sub">Available</span></div>
+                    <button class="book-action-btn" id="openTicketsBtn">Book Tickets</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TICKET CATEGORY SELECTION SHEET -->
+    <div id="ticketModal" class="modal-overlay bottom-sheet">
+        <div class="modal-content-standard">
+            <div class="close-btn" onclick="closeModal('ticketModal')">✕</div>
+            <div class="sheet-header">Select Tickets</div>
+            <div class="ticket-list" id="ticketOptionsContainer"></div>
+        </div>
+    </div>
+
+    <!-- MY TICKETS MODAL -->
+    <div id="myTicketsModal" class="modal-overlay bottom-sheet">
+        <div class="modal-content-standard" style="max-width: 450px;">
+            <div class="close-btn" onclick="closeModal('myTicketsModal')">✕</div>
+            <div class="sheet-header">My Booked Passes</div>
+            <div class="ticket-list" id="myTicketsListContainer" style="max-height: 60vh; overflow-y: auto;">
+                <p style="text-align:center; color:var(--text-muted); font-size:12px;">No passes booked yet.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="site-footer">
+        <h3 style="color: var(--gold); margin: 0 0 8px 0; font-size: 15px;">EventSphere Tickets</h3>
+        <p class="footer-links">
+            <span onclick="openMyTicketsModal()">View My Tickets</span>
+        </p>
+        <p class="footer-text">© 2026 EventSphere Gujarat. All rights reserved.</p>
+    </div>
+
+    <!-- BOTTOM NAVIGATION -->
+    <div class="bottom-nav">
+        <div class="nav-item active" id="navHome" onclick="switchTab('homeView', 'navHome')"><span class="nav-icon">✨</span><span>Home</span></div>
+        <div class="nav-item" id="navExplore" onclick="switchTab('exploreView', 'navExplore')"><span class="nav-icon">🔍</span><span>Explore</span></div>
+        <div class="nav-item" id="navDining" onclick="switchTab('diningView', 'navDining')"><span class="nav-icon">🍽️</span><span>Dining</span></div>
+        <div class="nav-item" id="navHost" onclick="switchTab('hostView', 'navHost')"><span class="nav-icon">👤</span><span>Profile</span></div>
+    </div>
+
+    <!-- ================= JAVASCRIPT ================= -->
+    <script>
+        const MY_WHATSAPP = "918735840340"; 
+        const RAZORPAY_KEY = "rzp_live_YOUR_KEY_HERE"; 
+        let globalEvents = []; 
+        let listEvents = []; 
+        let sliderEvents = []; 
+        let pendingCategoryData = null; // Temporary hold for category selection before OTP
+
+        window.addEventListener('load', async () => {
+            const savedCity = localStorage.getItem('es_city');
+            if(savedCity) document.getElementById('selectedCityText').innerText = savedCity;
+
+            setTimeout(() => {
+                const splash = document.getElementById('splash-screen');
+                if(splash) {
+                    splash.style.opacity = '0';
+                    splash.style.transform = 'scale(1.1)';
+                    setTimeout(() => { splash.style.display = 'none'; }, 600);
+                }
+            }, 3500); 
+            
+            initCities();
+            await loadEvents();
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const directEventId = urlParams.get('event');
+            if (directEventId) {
+                openDetails(parseInt(directEventId));
+            }
+        });
+
+        // CITY MODAL
+        const gujaratCities = [
+            {name: "Ahmedabad", icon: "🏙️"}, {name: "Surat", icon: "💎"}, {name: "Rajkot", icon: "🏰"}, 
+            {name: "Vadodara", icon: "🏛️"}, {name: "Gandhinagar", icon: "🌳"}, {name: "Bhavnagar", icon: "🚢"}
+        ];
+
+        function initCities() {
+            document.getElementById('cityGrid').innerHTML = gujaratCities.map(c => `
+                <div class="city-item" onclick="selectCity('${c.name}')">
+                    <div class="city-icon">${c.icon}</div>
+                    <div class="city-name">${c.name}</div>
+                </div>
+            `).join('');
+        }
+        function openCityModal() { document.getElementById('cityModal').classList.add('show'); }
+        function closeCityModal() { document.getElementById('cityModal').classList.remove('show'); }
+        function selectCity(city) { document.getElementById('selectedCityText').innerText = city; localStorage.setItem('es_city', city); closeCityModal(); }
+
+        async function loadEvents() {
+            try {
+                const response = await fetch('events.json'); 
+                const eventsData = await response.json();
+                globalEvents = eventsData;
+                const today = new Date().toISOString().split('T')[0];
+                let validEvents = eventsData.filter(e => e.endDate >= today);
+
+                sliderEvents = validEvents.slice(0, 4);
+                listEvents = validEvents.slice(4);
+
+                renderSlider();
+                document.getElementById("eventList").innerHTML = listEvents.map(e => createCardHTML(e, 'LIVE')).join('');
+
+                const diningList = document.getElementById("diningList");
+                if (diningList) {
+                    const diningEvents = listEvents.filter(e => e.category === 'Dining' || e.title.toLowerCase().includes('dining') || e.title.toLowerCase().includes('cafe'));
+                    diningList.innerHTML = diningEvents.length > 0 ? diningEvents.map(e => createCardHTML(e, 'RESERVE')).join('') : `<p style="text-align:center; color:var(--text-muted); font-size:13px; grid-column: 1/-1;">No restaurants listed right now</p>`;
+                }
+            } catch (err) {
+                document.getElementById("eventList").innerHTML = `<p style="text-align:center; color:red; grid-column: 1/-1;">Error loading events.</p>`;
+            }
+        }
+
+        function createCardHTML(e, badgeText = "LIVE") {
+            const imgUrl = e.img || "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=800&q=80";
+            return `
+            <div class="event-card" onclick="openDetails(${e.id})">
+                <div class="date-badge">${badgeText}</div>
+                <div class="share-btn" onclick="event.stopPropagation(); shareEventCard(${e.id}, '${e.title.replace(/'/g, "\\'")}', '${e.venue.replace(/'/g, "\\'")}')" title="Share Event">📤</div>
+                <img src="${imgUrl}" class="event-img" alt="Event">
+                <div class="event-details">
+                    <h3 class="event-title">${e.title}</h3>
+                    <div class="event-info">
+                        <span>📍 ${e.venue}</span>
+                        <span>🕒 ${e.time}</span>
+                        ${(e.categories && e.categories.length > 0) ? `<span class="glowing-price">🎟️ ₹${e.categories[0].price} Onwards</span>` : ''}
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        function shareEventCard(eventId, title, venue) {
+            const currentUrl = window.location.href.split('?')[0];
+            const directLink = `${currentUrl}?event=${eventId}`;
+            const shareText = `🔥 Check out this amazing event on EventSphere!\n\n*${title}*\n📍 Venue: ${venue}\n\n👉 Tap to view details & book:\n${directLink}`;
+            
+            if (navigator.share) {
+                navigator.share({ title: title, text: shareText, url: directLink }).catch(err => console.log('Share canceled'));
+            } else {
+                const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
+                window.open(whatsappUrl, '_blank');
+            }
+        }
+
+        function renderSlider() {
+            const slider = document.getElementById('autoPromoSlider');
+            const dotsContainer = document.getElementById('promoSliderDots');
+            slider.innerHTML = sliderEvents.map(e => createCardHTML(e, 'POPULAR')).join('');
+            dotsContainer.innerHTML = sliderEvents.map((_, i) => `<div class="dot ${i === 0 ? 'active-dot' : ''}"></div>`).join('');
+        }
+
+        function filterCategory(cat, el) {
+            document.querySelectorAll('.category-scroll .chip').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+            let filtered = listEvents;
+            if (cat !== 'All') filtered = filtered.filter(e => JSON.stringify(e).toLowerCase().includes(cat.toLowerCase()));
+            document.getElementById("eventList").innerHTML = filtered.length ? filtered.map(e => createCardHTML(e, 'LIVE')).join('') : `<p style="text-align:center; color:var(--text-muted); grid-column:1/-1;">No events found</p>`;
+        }
+
+        function performSearch() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const res = listEvents.filter(e => e.title.toLowerCase().includes(query) || e.venue.toLowerCase().includes(query));
+            document.getElementById('searchResultsList').innerHTML = res.length ? res.map(e => createCardHTML(e, 'LIVE')).join('') : `<p style="text-align:center; color:var(--gold); grid-column:1/-1;">No results found</p>`;
+        }
+
+        function switchTab(viewId, navId) {
+            document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active-view'));
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active-view');
+            if(navId) document.getElementById(navId).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function openDetails(eventId) {
+            const event = globalEvents.find(e => e.id === eventId);
+            if(!event) return;
+
+            document.getElementById('detailImg').src = event.banner_img || event.img;
+            document.getElementById('detailTitle').innerText = event.title;
+            document.getElementById('detailVenue').innerText = event.venue;
+            document.getElementById('detailTime').innerText = (event.date ? event.date + " | " : "") + event.time;
+            document.getElementById('detailDuration').innerText = event.duration || "Event";
+            document.getElementById('detailDescription').innerText = event.description || "Experience the biggest premium event in your city. Bookings are open.";
+            if(event.categories && event.categories.length > 0) {
+                document.getElementById('detailPriceStart').innerText = `₹${event.categories[0].price} onwards`;
+            }
+
+            document.getElementById('openTicketsBtn').onclick = () => openTickets(eventId);
+            document.getElementById('detailsModal').style.display = 'flex';
+        }
+
+        function openTickets(eventId) {
+            document.getElementById('detailsModal').style.display = 'none'; 
+            const event = globalEvents.find(e => e.id === eventId);
+            const container = document.getElementById('ticketOptionsContainer');
+            const safeEventName = event.title.replace(/'/g, "\'");
+            const safeDate = event.date || "TBD";
+            const safeTime = event.time || "TBD";
+
+            container.innerHTML = event.categories.map(cat => `
+                <div class="ticket-item">
+                    <div>
+                        <h4 class="ticket-name">${cat.name}</h4>
+                        <p class="ticket-price">₹${cat.price}</p>
+                    </div>
+                    <button class="add-btn" onclick="requestOtpBeforeCategory('${safeEventName}', ${cat.price}, '${cat.name}', '${safeDate}', '${safeTime}', ${event.id})">Select</button>
+                </div>
+            `).join('');
+            document.getElementById('ticketModal').style.display = 'flex';
+        }
+
+        function closeModal(modalId) { document.getElementById(modalId).style.display = 'none'; }
+
+        // ================= BMS STYLE OTP VERIFICATION FLOW =================
+        function requestOtpBeforeCategory(eventName, price, category, date, time, eventId) {
+            closeModal('ticketModal');
+            // Save selection temporarily
+            pendingCategoryData = { eventName, price, category, date, time, eventId };
+
+            // Check if user is already verified in this session
+            const isVerified = localStorage.getItem('es_user_verified');
+            if (isVerified) {
+                // Skip OTP if already logged in/verified, go straight to checkout
+                openCheckoutView(pendingCategoryData.eventName, pendingCategoryData.price, pendingCategoryData.category, pendingCategoryData.date, pendingCategoryData.time, pendingCategoryData.eventId);
+            } else {
+                // Trigger OTP modal
+                document.getElementById('phoneInputStep').style.display = 'block';
+                document.getElementById('otpInputStep').style.display = 'none';
+                document.getElementById('userMobileInput').value = '';
+                document.getElementById('otpModal').style.display = 'flex';
+            }
+        }
+
+        function sendOtpCode() {
+            const mob = document.getElementById('userMobileInput').value.trim();
+            if(mob.length !== 10) {
+                alert("Please enter a valid 10-digit mobile number!");
+                return;
+            }
+            alert("OTP Sent to WhatsApp/SMS! (Demo OTP is: 1234)");
+            document.getElementById('phoneInputStep').style.display = 'none';
+            document.getElementById('otpInputStep').style.display = 'block';
+        }
+
+        function verifyOtpCode() {
+            const enteredOtp = document.getElementById('otpCodeInput').value.trim();
+            if(enteredOtp === "1234" || enteredOtp.length === 4) {
+                localStorage.setItem('es_user_verified', 'true');
+                closeModal('otpModal');
+                // Now open the checkout view with pending data
+                if (pendingCategoryData) {
+                    openCheckoutView(pendingCategoryData.eventName, pendingCategoryData.price, pendingCategoryData.category, pendingCategoryData.date, pendingCategoryData.time, pendingCategoryData.eventId);
+                }
+            } else {
+                alert("Invalid OTP! Enter '1234' for testing.");
+            }
+        }
+
+        function triggerOtpLoginModal() {
+            document.getElementById('phoneInputStep').style.display = 'block';
+            document.getElementById('otpInputStep').style.display = 'none';
+            document.getElementById('userMobileInput').value = '';
+            document.getElementById('otpModal').style.display = 'flex';
+        }
+
+        // CHECKOUT & ORDER SUMMARY LOGIC
+        let chkState = { eventName: "", date: "", time: "", category: "", basePrice: 0, qty: 1, addonTotal: 0, discount: 0, platformFee: 20 };
+
+        function openCheckoutView(eventName, price, category, date, time, eventId) {
+            chkState = { eventName, date, time, category, basePrice: price, qty: 1, addonTotal: 0, discount: 0, platformFee: 20 };
+
+            document.getElementById('chk-promo-code').value = "";
+            document.getElementById('chk-promo-msg').style.display = "none";
+            document.getElementById('chk-event-name').innerText = eventName;
+            
+            const event = globalEvents.find(e => e.id === eventId);
+            const dateContainer = document.getElementById('chk-date-container');
+            const dateSelect = document.getElementById('chk-date-select');
+            const isSeasonPass = category.toLowerCase().includes('season');
+
+            if (event && event.availableDates && event.availableDates.length > 0 && !isSeasonPass) {
+                dateContainer.style.display = "block";
+                chkState.date = event.availableDates[0]; 
+                let dateHtml = '';
+                event.availableDates.forEach((dStr, idx) => {
+                    const dObj = new Date(dStr);
+                    const dayName = dObj.toLocaleDateString('en-US', { weekday: 'short' }); 
+                    const dateNum = dObj.getDate(); 
+                    const monthName = dObj.toLocaleDateString('en-US', { month: 'short' }); 
+                    const activeCls = idx === 0 ? 'active' : '';
+                    dateHtml += `
+                    <div class="date-box ${activeCls}" onclick="selectChkDate('${dStr}', this)">
+                        <div class="db-day">${dayName}</div>
+                        <div class="db-date">${dateNum}</div>
+                        <div class="db-month">${monthName}</div>
+                    </div>`;
+                });
+                dateSelect.innerHTML = dateHtml;
+            } else {
+                dateContainer.style.display = "none";
+                chkState.date = date; 
+            }
+
+            document.getElementById('chk-event-meta').innerText = `${chkState.date} | ${time} • ${category}`;
+
+            const addonContainer = document.getElementById('chk-addons-container');
+            if(event && event.addons && event.addons.length > 0) {
+                addonContainer.style.display = "block";
+                let addonHtml = `<h3>Enhance Your Experience</h3>`;
+                addonHtml += event.addons.map(a => `
+                    <div class="addon-item">
+                        <div>
+                            <div style="font-size: 14px; font-weight: bold; color:#fff;">${a.name}</div>
+                            <div style="font-size: 10px; color:var(--text-muted);">${a.desc || ''}</div>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <span style="color:var(--gold-light); font-size:13px; font-weight:bold;">₹${a.price}</span>
+                            <input type="checkbox" class="chk-addon-checkbox" value="${a.price}" onchange="calcChkTotal()" style="width:18px; height:18px; accent-color: var(--gold);">
+                        </div>
+                    </div>
+                `).join('');
+                addonContainer.innerHTML = addonHtml;
+            } else {
+                addonContainer.style.display = "none";
+            }
+
+            calcChkTotal();
+            switchTab('checkoutView', null);
+        }
+
+        function selectChkDate(dateStr, element) {
+            document.querySelectorAll('.date-box').forEach(b => b.classList.remove('active'));
+            element.classList.add('active');
+            chkState.date = dateStr;
+            document.getElementById('chk-event-meta').innerText = `${chkState.date} | ${chkState.time} • ${chkState.category}`;
+        }
+
+        function updateChkQty(change) {
+            let newQty = chkState.qty + change;
+            if(newQty >= 1 && newQty <= 10) { 
+                chkState.qty = newQty; 
+                calcChkTotal(); 
+            }
+        }
+
+        function applyChkPromo() {
+            let code = document.getElementById('chk-promo-code').value.toUpperCase();
+            if(code === "GARBA50") {
+                chkState.discount = 50;
+                document.getElementById('chk-promo-msg').innerText = "₹50 Discount Applied!";
+                document.getElementById('chk-promo-msg').style.display = "block";
+                document.getElementById('chk-promo-msg').style.color = "#00e676";
+            } else {
+                chkState.discount = 0;
+                document.getElementById('chk-promo-msg').innerText = "Invalid Promo Code!";
+                document.getElementById('chk-promo-msg').style.display = "block";
+                document.getElementById('chk-promo-msg').style.color = "#ff1744";
+            }
+            calcChkTotal();
+        }
+
+        function calcChkTotal() {
+            let addonSum = 0;
+            document.querySelectorAll('.chk-addon-checkbox').forEach(cb => {
+                if(cb.checked) addonSum += parseInt(cb.value);
+            });
+            chkState.addonTotal = addonSum;
+
+            let baseTotal = chkState.basePrice * chkState.qty;
+            let finalTotal = baseTotal + chkState.addonTotal + chkState.platformFee - chkState.discount;
+            if(finalTotal < 0) finalTotal = 0;
+
+            document.getElementById('chk-qty').innerText = chkState.qty;
+            document.getElementById('chk-bill-qty').innerText = chkState.qty;
+            document.getElementById('chk-bill-base').innerText = `₹${baseTotal}`;
+            
+            const addonRow = document.getElementById('chk-row-addon');
+            if(addonRow) {
+                addonRow.style.display = chkState.addonTotal > 0 ? "flex" : "none";
+                document.getElementById('chk-bill-addon').innerText = `₹${chkState.addonTotal}`;
+            }
+
+            document.getElementById('chk-row-discount').style.display = chkState.discount > 0 ? "flex" : "none";
+            document.getElementById('chk-bill-discount').innerText = `-₹${chkState.discount}`;
+
+            document.getElementById('chk-bill-total').innerText = `₹${finalTotal}`;
+            document.getElementById('chk-bottom-total').innerText = `₹${finalTotal}`;
+        }
+
+        // RAZORPAY PAYMENT GATEWAY
+        function payWithRazorpay() {
+            let finalTotal = (chkState.basePrice * chkState.qty) + chkState.addonTotal + chkState.platformFee - chkState.discount;
+            
+            var options = {
+                "key": RAZORPAY_KEY,
+                "amount": finalTotal * 100, 
+                "currency": "INR",
+                "name": "EventSphere Tickets",
+                "description": `Pass for ${chkState.eventName} (${chkState.category})`,
+                "handler": function (response){
+                    saveTicketToStorage({
+                        paymentId: response.razorpay_payment_id,
+                        eventName: chkState.eventName,
+                        category: chkState.category,
+                        date: chkState.date,
+                        time: chkState.time,
+                        qty: chkState.qty,
+                        total: finalTotal
+                    });
+                },
+                "prefill": {
+                    "name": "EventSphere User",
+                    "email": "user@eventsphere.site",
+                    "contact": "9999999999"
+                },
+                "theme": {
+                    "color": "#D4AF37"
+                }
+            };
+            var rzp1 = new Razorpay(options);
+            rzp1.open();
+        }
+
+        // MY TICKETS LOCAL STORAGE & QR GENERATOR
+        function saveTicketToStorage(ticketDetails) {
+            let myTickets = JSON.parse(localStorage.getItem('es_user_tickets') || '[]');
+            ticketDetails.passId = 'ES-' + Math.floor(100000 + Math.random() * 900000);
+            ticketDetails.bookedOn = new Date().toLocaleDateString();
+            myTickets.push(ticketDetails);
+            localStorage.setItem('es_user_tickets', JSON.stringify(myTickets));
+
+            alert("Payment Successful! Pass generated successfully.");
+            switchTab('homeView', 'navHome');
+            openMyTicketsModal();
+        }
+
+        function openMyTicketsModal() {
+            let myTickets = JSON.parse(localStorage.getItem('es_user_tickets') || '[]');
+            const container = document.getElementById('myTicketsListContainer');
+
+            if(myTickets.length === 0) {
+                container.innerHTML = `<p style="text-align:center; color:var(--text-muted); font-size:12px;">No passes booked yet.</p>`;
+            } else {
+                container.innerHTML = myTickets.map(t => `
+                    <div class="ticket-item" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+                        <div style="display: flex; justify-content: space-between; width:100%;">
+                            <span style="color:var(--gold); font-size:11px; font-weight:bold;">Pass ID: ${t.passId}</span>
+                            <span style="color:var(--success); font-size:11px; font-weight:bold;">Paid ₹${t.total}</span>
+                        </div>
+                        <div>
+                            <h4 class="ticket-name" style="font-size:13px; color:#fff;">${t.eventName}</h4>
+                            <p class="ticket-price" style="font-size:11px; color:#ccc;">${t.category} | Qty: ${t.qty}</p>
+                            <p style="font-size:10px; color:var(--text-muted); margin: 2px 0 0 0;">Date: ${t.date} (${t.time})</p>
+                        </div>
+                        <div style="width: 100%; text-align: center; background: #fff; padding: 6px; border-radius: 6px; margin-top: 5px;">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${t.passId}" alt="QR" style="width: 80px; height: 80px;">
+                            <div style="font-size: 9px; color: #000; font-weight: bold; margin-top: 2px;">SCAN AT VENUE</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            document.getElementById('myTicketsModal').style.display = 'flex';
+        }
+
+        // HOST FORM TO WHATSAPP
+        function submitEventToWhatsApp(e) {
+            e.preventDefault();
+            const org = document.querySelector('input[name="Organizer_Name"]').value;
+            const mob = document.querySelector('input[name="Mobile_Number"]').value;
+            const title = document.querySelector('input[name="Event_Title"]').value;
+            const dist = document.querySelector('select[name="District"]').value;
+            const venue = document.querySelector('textarea[name="Venue_Address"]').value;
+            const details = document.querySelector('textarea[name="Event_Details"]').value;
+
+            const msg = `*📥 New Event Listing Request*\n\n` +
+                        `*Organizer:* ${org}\n` +
+                        `*Mobile:* ${mob}\n` +
+                        `*Event:* ${title}\n` +
+                        `*District:* ${dist}\n` +
+                        `*Venue:* ${venue}\n` +
+                        `*Details:* ${details}`;
+
+            window.open(`https://wa.me/${MY_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+    </script>
+</body>
+</html>
