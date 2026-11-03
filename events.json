@@ -1,41 +1,53 @@
-// ================= EVENTSPHERE - EVENTS CARD DATA =================
-
-const eventsData = [
+[
     {
-        id: "event_1",
-        name: "Gandhinagar Navratri Mahotsav 2026",
-        category: "VIP Garba Pass",
-        date: "10th October 2026",
-        time: "07:30 PM Onwards",
-        price: 499,
-        description: "Traditional Garba night."
+        "id": 1,
+        "title": "Gandhinagar Navratri Mahotsav 2026",
+        "category": "Garba",
+        "date": "2026-10-10",
+        "endDate": "2026-10-20",
+        "venue": "Mahatma Mandir Ground, Gandhinagar",
+        "time": "07:30 PM Onwards",
+        "duration": "10 Days",
+        "description": "The ultimate traditional Garba night with live orchestra and celebrity singers in Gandhinagar.",
+        "img": "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=800&q=80",
+        "categories": [
+            { "name": "VIP Garba Pass", "price": 499 },
+            { "name": "Season Pass", "price": 1499 }
+        ],
+        "availableDates": ["2026-10-10", "2026-10-11", "2026-10-12"]
     },
     {
-        id: "event_2",
-        name: "Royal Dandiya Nights",
-        category: "Season Pass",
-        date: "12th October 2026",
-        time: "08:00 PM Onwards",
-        price: 799,
-        description: "Dandiya celebration."
+        "id": 2,
+        "title": "Royal Dandiya Nights",
+        "category": "Garba",
+        "date": "2026-10-12",
+        "endDate": "2026-10-18",
+        "venue": "Near GIFT City, Gandhinagar",
+        "time": "08:00 PM Onwards",
+        "duration": "6 Days",
+        "description": "Experience premium sound, professional dance floor, and vibrant cultural celebrations.",
+        "img": "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=800&q=80",
+        "categories": [
+            { "name": "General Pass", "price": 299 },
+            { "name": "VIP Couple Pass", "price": 899 }
+        ],
+        "availableDates": ["2026-10-12", "2026-10-13"]
     },
     {
-        id: "event_3",
-        name: "Gandhinagar Music Fest 2026",
-        category: "VIP Entry Pass",
-        date: "15th Nov 2026",
-        time: "06:00 PM",
-        price: 499,
-        description: "Live musical night."
+        "id": 3,
+        "title": "Gandhinagar Music Fest 2026",
+        "category": "Music",
+        "date": "2026-11-15",
+        "endDate": "2026-11-15",
+        "venue": "Sector 21 Ground, Gandhinagar",
+        "time": "06:00 PM",
+        "duration": "1 Day",
+        "description": "Experience the biggest live musical night in Gandhinagar with top artists.",
+        "img": "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=800&q=80",
+        "categories": [
+            { "name": "VIP Entry Pass", "price": 499 },
+            { "name": "Fan Pit Pass", "price": 999 }
+        ],
+        "availableDates": ["2026-11-15"]
     }
-];
-
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = eventsData;
-}
-```[cite: 1]
-
----
-<FollowUp>
-Bhai, ab theek hai na yeh wala chhota aur simple format? Isko save kar le!
-</FollowUp>
+]
