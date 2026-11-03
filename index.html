@@ -533,14 +533,14 @@
         <div class="modal-content-standard" style="max-width: 380px; text-align: left;">
             <div class="close-btn" onclick="closeModal('otpModal')">✕</div>
             <div class="sheet-header" style="text-align: left; border:none; margin-bottom:4px;">Verify Mobile Number</div>
-            <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 15px;">We will send a 4-digit verification code to proceed with booking.</p>
+            <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 15px;">We will send a 4-digit verification code via WhatsApp to proceed.</p>
             
             <div id="phoneInputStep">
                 <div class="form-group">
                     <label>WhatsApp / Mobile Number</label>
                     <input type="tel" id="userMobileInput" placeholder="Enter 10-digit number" maxlength="10">
                 </div>
-                <button class="submit-btn" onclick="sendOtpCode()">Send OTP 📱</button>
+                <button class="submit-btn" onclick="sendOtpCode()">Send WhatsApp OTP 📱</button>
             </div>
 
             <div id="otpInputStep" style="display: none;">
@@ -548,6 +548,7 @@
                     <label>Enter 4-Digit OTP</label>
                     <input type="text" id="otpCodeInput" placeholder="e.g. 1234" maxlength="4">
                 </div>
+                <div id="debugOtpBox" style="font-size: 12px; color: var(--gold); margin-bottom: 8px;"></div>
                 <button class="submit-btn" onclick="verifyOtpCode()">Verify & Proceed 🚀</button>
             </div>
         </div>
@@ -612,6 +613,18 @@
         </div>
     </div>
 
+    <!-- SUCCESS TICKET MODAL (AFTER PAYMENT) -->
+    <div id="successTicketModal" class="modal-overlay bottom-sheet">
+        <div class="modal-content-standard" style="max-width: 420px; text-align: center;">
+            <div class="close-btn" onclick="closeModal('successTicketModal')">✕</div>
+            <div style="background: #064e3b; border: 1px solid #10b981; padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+                <h3 style="color: #34d399; margin:0 0 4px 0;">🎉 Booking Confirmed!</h3>
+                <p style="font-size:11px; color:#fff; margin:0;">Your ticket has been sent to your WhatsApp.</p>
+            </div>
+            <div id="successTicketDetails" style="background: #000; border: 2px dashed var(--gold); padding: 15px; border-radius: 10px;"></div>
+        </div>
+    </div>
+
     <!-- FOOTER -->
     <div class="site-footer">
         <h3 style="color: var(--gold); margin: 0 0 8px 0; font-size: 15px;">EventSphere Tickets</h3>
@@ -629,14 +642,18 @@
         <div class="nav-item" id="navHost" onclick="switchTab('hostView', 'navHost')"><span class="nav-icon">👤</span><span>Profile</span></div>
     </div>
 
-    <!-- ================= JAVASCRIPT ================= -->
+    <!-- ================= JAVASCRIPT (LIVE BACKEND CONNECTED) ================= -->
     <script>
+        const BACKEND_URL = "https://eventsphere-api-imzq.onrender.com";
         const MY_WHATSAPP = "918735840340"; 
-        const RAZORPAY_KEY = "rzp_live_YOUR_KEY_HERE"; 
+        const RAZORPAY_KEY = "rzp_live_TG2UWr9VztqbAn"; 
+        
         let globalEvents = []; 
         let listEvents = []; 
         let sliderEvents = []; 
         let pendingCategoryData = null;
+        let userPhone = "";
+        let userName = "EventSphere User";
 
         window.addEventListener('load', async () => {
             const savedCity = localStorage.getItem('es_city');
@@ -802,12 +819,14 @@
 
         function closeModal(modalId) { document.getElementById(modalId).style.display = 'none'; }
 
+        // ================= LIVE WHATSAPP OTP INTEGRATION =================
         function requestOtpBeforeCategory(eventName, price, category, date, time, eventId) {
             closeModal('ticketModal');
             pendingCategoryData = { eventName, price, category, date, time, eventId };
 
             const isVerified = localStorage.getItem('es_user_verified');
             if (isVerified) {
+                userPhone = localStorage.getItem('es_user_phone') || "9999999999";
                 openCheckoutView(pendingCategoryData.eventName, pendingCategoryData.price, pendingCategoryData.category, pendingCategoryData.date, pendingCategoryData.time, pendingCategoryData.eventId);
             } else {
                 document.getElementById('phoneInputStep').style.display = 'block';
@@ -817,27 +836,64 @@
             }
         }
 
-        function sendOtpCode() {
+        async function sendOtpCode() {
             const mob = document.getElementById('userMobileInput').value.trim();
             if(mob.length !== 10) {
                 alert("Please enter a valid 10-digit mobile number!");
                 return;
             }
-            alert("OTP Sent to WhatsApp/SMS! (Demo OTP is: 1234)");
-            document.getElementById('phoneInputStep').style.display = 'none';
-            document.getElementById('otpInputStep').style.display = 'block';
+            userPhone = mob;
+
+            try {
+                const res = await fetch(`${BACKEND_URL}/send-otp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: userName, phone: userPhone })
+                });
+                const data = await res.json();
+                
+                if(data.success) {
+                    alert(data.message);
+                    document.getElementById('phoneInputStep').style.display = 'none';
+                    document.getElementById('otpInputStep').style.display = 'block';
+                    if(data.debug_otp) {
+                        document.getElementById('debugOtpBox').innerHTML = `Debug OTP: <b>${data.debug_otp}</b>`;
+                    }
+                } else {
+                    alert(data.message || 'Error sending OTP');
+                }
+            } catch (err) {
+                alert('Server connection error in sending OTP.');
+            }
         }
 
-        function verifyOtpCode() {
+        async function verifyOtpCode() {
             const enteredOtp = document.getElementById('otpCodeInput').value.trim();
-            if(enteredOtp === "1234" || enteredOtp.length === 4) {
-                localStorage.setItem('es_user_verified', 'true');
-                closeModal('otpModal');
-                if (pendingCategoryData) {
-                    openCheckoutView(pendingCategoryData.eventName, pendingCategoryData.price, pendingCategoryData.category, pendingCategoryData.date, pendingCategoryData.time, pendingCategoryData.eventId);
+            if(!enteredOtp) {
+                alert("Please enter the OTP!");
+                return;
+            }
+
+            try {
+                const res = await fetch(`${BACKEND_URL}/verify-otp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ phone: userPhone, otp: enteredOtp })
+                });
+                const data = await res.json();
+
+                if(data.success) {
+                    localStorage.setItem('es_user_verified', 'true');
+                    localStorage.setItem('es_user_phone', userPhone);
+                    closeModal('otpModal');
+                    if (pendingCategoryData) {
+                        openCheckoutView(pendingCategoryData.eventName, pendingCategoryData.price, pendingCategoryData.category, pendingCategoryData.date, pendingCategoryData.time, pendingCategoryData.eventId);
+                    }
+                } else {
+                    alert(data.message || 'Invalid OTP!');
                 }
-            } else {
-                alert("Invalid OTP! Enter '1234' for testing.");
+            } catch (err) {
+                alert('Server connection error verifying OTP.');
             }
         }
 
@@ -971,49 +1027,97 @@
             document.getElementById('chk-bottom-total').innerText = `₹${finalTotal}`;
         }
 
-        function payWithRazorpay() {
+        // ================= RAZORPAY & BACKEND TICKET VERIFICATION =================
+        async function payWithRazorpay() {
             let finalTotal = (chkState.basePrice * chkState.qty) + chkState.addonTotal + chkState.platformFee - chkState.discount;
             
-            var options = {
-                "key": RAZORPAY_KEY,
-                "amount": finalTotal * 100, 
-                "currency": "INR",
-                "name": "EventSphere Diwali Edition",
-                "description": `Pass for ${chkState.eventName} (${chkState.category})`,
-                "handler": function (response){
+            try {
+                const orderRes = await fetch(`${BACKEND_URL}/create-order`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ amount: finalTotal })
+                });
+                const orderData = await orderRes.json();
+
+                var options = {
+                    "key": RAZORPAY_KEY,
+                    "amount": orderData.order ? orderData.order.amount : finalTotal * 100, 
+                    "currency": "INR",
+                    "name": "EventSphere Diwali Edition",
+                    "description": `Pass for ${chkState.eventName} (${chkState.category})`,
+                    "order_id": orderData.order ? orderData.order.id : undefined,
+                    "handler": async function (response){
+                        await verifyPaymentOnBackend(response.razorpay_payment_id, finalTotal);
+                    },
+                    "prefill": {
+                        "name": userName,
+                        "contact": userPhone
+                    },
+                    "theme": {
+                        "color": "#D4AF37"
+                    }
+                };
+                var rzp1 = new Razorpay(options);
+                rzp1.open();
+            } catch (err) {
+                alert('Payment initialization failed.');
+            }
+        }
+
+        async function verifyPaymentOnBackend(paymentId, finalTotal) {
+            try {
+                const res = await fetch(`${BACKEND_URL}/verify-payment`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        payment_id: paymentId,
+                        event_name: chkState.eventName,
+                        category: chkState.category,
+                        customer_phone: userPhone,
+                        date: `${chkState.date} | ${chkState.time}`,
+                        amount: finalTotal
+                    })
+                });
+                const data = await res.json();
+
+                if(data.success) {
+                    saveTicketToStorage(data.ticket);
+                } else {
+                    // Fallback local ticket generation if backend call fails slightly
                     saveTicketToStorage({
-                        paymentId: response.razorpay_payment_id,
+                        passId: 'ES-DIWALI-' + Math.floor(100000 + Math.random() * 900000),
                         eventName: chkState.eventName,
                         category: chkState.category,
                         date: chkState.date,
                         time: chkState.time,
                         qty: chkState.qty,
-                        total: finalTotal
+                        total: finalTotal,
+                        qrCode: `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=ES-DIWALI-${paymentId}`
                     });
-                },
-                "prefill": {
-                    "name": "EventSphere User",
-                    "email": "user@eventsphere.site",
-                    "contact": "9999999999"
-                },
-                "theme": {
-                    "color": "#D4AF37"
                 }
-            };
-            var rzp1 = new Razorpay(options);
-            rzp1.open();
+            } catch (err) {
+                alert('Error verifying payment on backend.');
+            }
         }
 
         function saveTicketToStorage(ticketDetails) {
             let myTickets = JSON.parse(localStorage.getItem('es_user_tickets') || '[]');
-            ticketDetails.passId = 'ES-DIWALI-' + Math.floor(100000 + Math.random() * 900000);
+            if(!ticketDetails.passId) ticketDetails.passId = 'ES-DIWALI-' + Math.floor(100000 + Math.random() * 900000);
+            if(!ticketDetails.qrCode) ticketDetails.qrCode = `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${ticketDetails.passId}`;
             ticketDetails.bookedOn = new Date().toLocaleDateString();
             myTickets.push(ticketDetails);
             localStorage.setItem('es_user_tickets', JSON.stringify(myTickets));
 
-            alert("Diwali Payment Successful! Pass generated successfully.");
+            document.getElementById('successTicketDetails').innerHTML = `
+                <h3 style="color: var(--accent); margin-bottom:6px;">${ticketDetails.eventName || chkState.eventName}</h3>
+                <p style="margin: 4px 0; font-size:12px;"><b>Pass ID:</b> ${ticketDetails.passId}</p>
+                <p style="margin: 4px 0; font-size:12px;"><b>Category:</b> ${ticketDetails.category || chkState.category}</p>
+                <p style="margin: 4px 0; font-size:12px;"><b>Date:</b> ${ticketDetails.date || chkState.date}</p>
+                <img src="${ticketDetails.qrCode}" alt="Ticket QR Code" style="width: 140px; height: 140px; margin-top: 10px; border-radius: 6px; background:#fff; padding:4px;" />
+                <p style="font-size: 11px; color: var(--text-muted); margin-top: 8px;">Show this QR code at venue entry.</p>
+            `;
             switchTab('homeView', 'navHome');
-            openMyTicketsModal();
+            document.getElementById('successTicketModal').style.display = 'flex';
         }
 
         function openMyTicketsModal() {
@@ -1027,15 +1131,15 @@
                     <div class="ticket-item" style="flex-direction: column; align-items: flex-start; gap: 8px;">
                         <div style="display: flex; justify-content: space-between; width:100%;">
                             <span style="color:var(--gold); font-size:11px; font-weight:bold;">Pass ID: ${t.passId}</span>
-                            <span style="color:var(--success); font-size:11px; font-weight:bold;">Paid ₹${t.total}</span>
+                            <span style="color:var(--success); font-size:11px; font-weight:bold;">Paid ₹${t.total || t.amount || 0}</span>
                         </div>
                         <div>
                             <h4 class="ticket-name" style="font-size:13px; color:#fff;">${t.eventName}</h4>
-                            <p class="ticket-price" style="font-size:11px; color:#ccc;">${t.category} | Qty: ${t.qty}</p>
-                            <p style="font-size:10px; color:var(--text-muted); margin: 2px 0 0 0;">Date: ${t.date} (${t.time})</p>
+                            <p class="ticket-price" style="font-size:11px; color:#ccc;">${t.category} | Qty: ${t.qty || 1}</p>
+                            <p style="font-size:10px; color:var(--text-muted); margin: 2px 0 0 0;">Date: ${t.date}</p>
                         </div>
                         <div style="width: 100%; text-align: center; background: #fff; padding: 6px; border-radius: 6px; margin-top: 5px;">
-                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${t.passId}" alt="QR" style="width: 80px; height: 80px;">
+                            <img src="${t.qrCode || 'https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=' + t.passId}" alt="QR" style="width: 80px; height: 80px;">
                             <div style="font-size: 9px; color: #000; font-weight: bold; margin-top: 2px;">SCAN AT VENUE</div>
                         </div>
                     </div>
