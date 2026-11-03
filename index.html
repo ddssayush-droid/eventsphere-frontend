@@ -837,9 +837,14 @@
         }
 
         async function sendOtpCode() {
-            const mob = document.getElementById('userMobileInput').value.trim();
+            const mobInput = document.getElementById('userMobileInput');
+            if(!mobInput) {
+                alert("Mobile input field nahi mila!");
+                return;
+            }
+            const mob = mobInput.value.trim();
             if(mob.length !== 10) {
-                alert("Please enter a valid 10-digit mobile number!");
+                alert("Kripya poora 10-digit mobile number enter karein!");
                 return;
             }
             userPhone = mob;
@@ -1083,7 +1088,6 @@
                 if(data.success) {
                     saveTicketToStorage(data.ticket);
                 } else {
-                    // Fallback local ticket generation if backend call fails slightly
                     saveTicketToStorage({
                         passId: 'ES-DIWALI-' + Math.floor(100000 + Math.random() * 900000),
                         eventName: chkState.eventName,
