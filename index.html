@@ -10,7 +10,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>EventSphere | Diwali Special Edition 🪔</title>
+    <title>EventSphere | Diwali Royal Edition 🪔</title>
     
     <!-- Favicon & Logo for Google & Browsers -->
     <link rel="icon" type="image/png" href="logo.jpg">
@@ -65,61 +65,66 @@
             100% { transform: translateY(-8px); }
         }
 
-        /* ================= 🎬 ULTRA-PREMIUM TICKET DROP INTRO 🎬 ================= */
+        /* ================= 🌟 PRO CINEMATIC 4-CORNER RANGOLI & FIREWORKS INTRO 🌟 ================= */
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: radial-gradient(circle at center, #1a0f00 0%, #000 100%);
+            background: radial-gradient(circle at center, #1f1000 0%, #000 100%);
             z-index: 99999; display: flex; flex-direction: column;
             align-items: center; justify-content: center; overflow: hidden;
-            transition: opacity 0.6s ease, transform 0.6s ease;
+            transition: opacity 0.8s ease, transform 0.8s ease;
         }
 
-        .intro-ticket {
-            width: 200px; height: 100px;
-            background: radial-gradient(circle at right, #D4AF37 0%, #8A6E27 100%);
-            border-radius: 12px; position: relative;
+        /* 4 Corner Golden Rangolis */
+        .corner-rangoli {
+            position: absolute; font-size: 50px; color: #D4AF37; opacity: 0.8;
+            filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.8));
+            animation: pulseRangoli 2s ease-in-out infinite alternate;
+            z-index: 2;
+        }
+        .c-tl { top: 20px; left: 20px; animation-delay: 0s; }
+        .c-tr { top: 20px; right: 20px; animation-delay: 0.5s; }
+        .c-bl { bottom: 20px; left: 20px; animation-delay: 1s; }
+        .c-br { bottom: 20px; right: 20px; animation-delay: 1.5s; }
+
+        @keyframes pulseRangoli {
+            0% { transform: scale(0.9) rotate(0deg); opacity: 0.6; filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.5)); }
+            100% { transform: scale(1.1) rotate(15deg); opacity: 1; filter: drop-shadow(0 0 25px rgba(255, 215, 0, 1)); }
+        }
+
+        /* Center Pro Diya & Sparkles Container */
+        .intro-diya-container {
+            width: 140px; height: 140px;
+            background: radial-gradient(circle, rgba(212,175,55,0.3) 0%, rgba(0,0,0,0.8) 80%);
+            border-radius: 50%; position: relative;
             display: flex; align-items: center; justify-content: center;
             border: 2px solid #F5D76E;
-            box-shadow: 0 15px 35px rgba(212, 175, 55, 0.8), inset 0 0 15px rgba(255,255,255,0.4);
-            animation: dropTicket 1s cubic-bezier(0.25, 1, 0.5, 1) forwards, floatTicket 2s ease-in-out infinite alternate 1s;
-            opacity: 0; margin-bottom: 25px; overflow: hidden;
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.8), inset 0 0 20px rgba(255,215,0,0.5);
+            animation: dropDiya 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards, floatDiyaCenter 2s ease-in-out infinite alternate 1.2s;
+            opacity: 0; margin-bottom: 25px;
         }
         
-        .intro-ticket::before, .intro-ticket::after {
-            content: ''; position: absolute; width: 24px; height: 24px;
-            background: #050505; border-radius: 50%;
-            top: 50%; transform: translateY(-50%); box-shadow: inset 0 0 8px rgba(0,0,0,0.9); z-index: 5;
-        }
-        .intro-ticket::before { left: -12px; }
-        .intro-ticket::after { right: -12px; }
-        
-        .rangoli {
-            position: absolute; color: rgba(255, 215, 0, 0.5); font-size: 28px; line-height: 1;
-            animation: spinRangoli 4s ease-out forwards;
-        }
-        .r-tl { top: -2px; left: 12px; } .r-tr { top: -2px; right: 12px; }
-        .r-bl { bottom: -2px; left: 12px; } .r-br { bottom: -2px; right: 12px; }
-
-        @keyframes spinRangoli { 
-            0% { transform: rotate(0deg) scale(0.5); opacity: 1; } 
-            80% { transform: rotate(720deg) scale(1.2); opacity: 0.8; } 
-            100% { transform: rotate(1080deg) scale(1); opacity: 0; } 
+        .diya-flame {
+            font-size: 60px;
+            animation: flickerFlame 0.3s ease-in-out infinite alternate;
+            filter: drop-shadow(0 0 20px #ff9900) drop-shadow(0 0 40px #ff3300);
         }
 
-        .intro-ticket-content { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 0 25px; z-index: 2; }
-        .intro-text-side { display: flex; flex-direction: column; text-align: left; }
-        .intro-text-side span.bold { font-size: 13px; color: #000; font-weight: 900; letter-spacing: 1px; line-height: 1.2; text-shadow: 0 1px 2px rgba(255,255,255,0.4); }
-        .intro-text-side span.sub { font-size: 10px; color: #111; font-weight: bold; letter-spacing: 3px; margin-top: 2px;}
-
-        .intro-qr-corner {
-            width: 50px; height: 50px; border: 2px solid #000; border-radius: 6px;
-            background: #fff; padding: 3px; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+        @keyframes dropDiya { 
+            0% { transform: translateY(-100vh) scale(2); opacity: 0; } 
+            70% { transform: translateY(15px) scale(0.9); opacity: 1; } 
+            100% { transform: translateY(0) scale(1); opacity: 1; } 
         }
-        .intro-qr-corner img { width: 100%; height: 100%; object-fit: contain; }
+        @keyframes floatDiyaCenter { 
+            0% { transform: translateY(0) scale(1); box-shadow: 0 0 40px rgba(212,175,55,0.7); } 
+            100% { transform: translateY(-12px) scale(1.05); box-shadow: 0 0 70px rgba(255,215,0,1); } 
+        }
+        @keyframes flickerFlame {
+            0% { transform: scale(1) rotate(-2deg); opacity: 0.9; }
+            100% { transform: scale(1.1) rotate(2deg); opacity: 1; }
+        }
 
         .cinematic-text {
-            font-size: 28px; font-weight: 900; margin: 0;
+            font-size: 32px; font-weight: 900; margin: 0;
             background: linear-gradient(45deg, #fff, #D4AF37, #ffaa00);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             text-transform: uppercase; letter-spacing: 12px; opacity: 0; filter: blur(10px);
@@ -128,15 +133,19 @@
         }
 
         .intro-slogan {
-            color: var(--gold-light); font-size: 10px; font-weight: bold; letter-spacing: 3px;
-            text-transform: uppercase; margin-top: 10px; opacity: 0;
+            color: var(--gold-light); font-size: 11px; font-weight: bold; letter-spacing: 4px;
+            text-transform: uppercase; margin-top: 12px; opacity: 0;
             animation: sloganReveal 1s ease 1s forwards; text-align: center;
         }
 
-        @keyframes dropTicket { 0% { transform: translateY(-100vh) rotate(-30deg) scale(1.5); opacity: 0; } 60% { transform: translateY(20px) rotate(10deg) scale(0.9); opacity: 1; } 100% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; } }
-        @keyframes floatTicket { 0% { transform: translateY(0) rotate(0deg); box-shadow: 0 15px 35px rgba(212,175,55,0.8); } 100% { transform: translateY(-8px) rotate(2deg); box-shadow: 0 25px 45px rgba(212,175,55,1); } }
-        @keyframes textRevealPremium { 0% { opacity: 0; letter-spacing: 20px; filter: blur(15px); transform: translateY(15px); } 100% { opacity: 1; letter-spacing: 4px; filter: blur(0); transform: translateY(0); } }
-        @keyframes sloganReveal { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 0.9; transform: translateY(0); } }
+        @keyframes textRevealPremium { 
+            0% { opacity: 0; letter-spacing: 25px; filter: blur(15px); transform: translateY(20px); } 
+            100% { opacity: 1; letter-spacing: 5px; filter: blur(0); transform: translateY(0); } 
+        }
+        @keyframes sloganReveal { 
+            0% { opacity: 0; transform: translateY(10px); } 
+            100% { opacity: 0.95; transform: translateY(0); } 
+        }
         /* ================= END CINEMATIC SPLASH ================= */
 
         /* ================= BASE STYLES & THEME ================= */
@@ -344,25 +353,18 @@
         <p>Diwali Special</p>
     </div>
 
-    <!-- ================= 🎬 DIWALI SPLASH SCREEN ================= -->
+    <!-- ================= 🌟 ROYAL 4-CORNER RANGOLI & DIYA SPLASH SCREEN 🌟 ================= -->
     <div id="splash-screen">
-        <div class="intro-ticket">
-            <span class="rangoli r-tl">❊</span>
-            <span class="rangoli r-tr">❊</span>
-            <span class="rangoli r-bl">❊</span>
-            <span class="rangoli r-br">❊</span>
-            <div class="intro-ticket-content">
-                <div class="intro-text-side">
-                    <span class="bold">DIWALI 2026</span>
-                    <span class="sub">FESTIVAL</span>
-                </div>
-                <div class="intro-qr-corner">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=EventSphereDiwali" alt="QR">
-                </div>
-            </div>
+        <div class="corner-rangoli c-tl">❊</div>
+        <div class="corner-rangoli c-tr">❊</div>
+        <div class="corner-rangoli c-bl">❊</div>
+        <div class="corner-rangoli c-br">❊</div>
+
+        <div class="intro-diya-container">
+            <div class="diya-flame">🪔</div>
         </div>
         <h1 class="cinematic-text">EVENTSPHERE</h1>
-        <p class="intro-slogan">Happy Diwali • Gujarat's Zero-Cost Ticketing</p>
+        <p class="intro-slogan">Happy Diwali 2026 • Gujarat's Zero-Cost Ticketing</p>
     </div>
 
     <!-- HEADER -->
@@ -679,7 +681,7 @@
                 if(splash) {
                     splash.style.opacity = '0';
                     splash.style.transform = 'scale(1.1)';
-                    setTimeout(() => { splash.style.display = 'none'; }, 600);
+                    setTimeout(() => { splash.style.display = 'none'; }, 800);
                 }
             }, 3500); 
             
