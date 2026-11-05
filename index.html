@@ -10,7 +10,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>EventSphere | Diwali Cinematic Edition 🪔</title>
+    <title>EventSphere | Diwali Real Sky-Shot Edition 🪔</title>
     
     <!-- Favicon & Logo for Google & Browsers -->
     <link rel="icon" type="image/png" href="logo.jpg">
@@ -65,56 +65,34 @@
             100% { transform: translateY(-8px); }
         }
 
-        /* ================= 🎬 5-SEC CINEMATIC SKY-SHOT & BLAST INTRO 🎬 ================= */
+        /* ================= 🚀 REAL 5-SEC SKY-SHOT FIREWORKS INTRO 🚀 ================= */
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: radial-gradient(circle at center, #110500 0%, #000000 100%);
+            background: radial-gradient(circle at center, #0f0700 0%, #000000 100%);
             z-index: 99999; display: flex; flex-direction: column;
             align-items: center; justify-content: center; overflow: hidden;
             transition: opacity 1s ease, transform 1s ease;
         }
 
-        /* Sky Shot Rockets coming from bottom */
-        .sky-shot-rocket {
-            position: absolute; bottom: 0; width: 4px; height: 35px;
-            background: linear-gradient(to top, transparent, #fff, #ffcc00);
-            border-radius: 50%; opacity: 0;
-            animation: shootUp 1.2s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
-        }
-        @keyframes shootUp {
-            0% { transform: translateY(100vh); opacity: 1; }
-            70% { opacity: 1; }
-            100% { transform: translateY(-35vh); opacity: 0; }
+        /* Canvas for Real Sky-Shot Fireworks */
+        #fireworksCanvas {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2;
         }
 
-        /* Cinematic Blast / Phoot Flash Effect */
-        .cinematic-flash {
-            position: absolute; width: 10px; height: 10px; background: #fff; border-radius: 50%;
-            box-shadow: 0 0 80px 40px #ffaa00, 0 0 150px 80px #ff3300;
-            opacity: 0; transform: scale(0);
-            animation: blastEffect 1.2s ease-out 1s forwards;
-            z-index: 5;
-        }
-        @keyframes blastEffect {
-            0% { transform: scale(0.1); opacity: 1; }
-            50% { transform: scale(15); opacity: 0.9; }
-            100% { transform: scale(40); opacity: 0; }
-        }
-
-        /* Cinematic Text reveal after blast */
+        /* Cinematic Text reveal after sky shots */
         .cinematic-text {
-            font-size: 40px; font-weight: 900; margin: 0;
+            font-size: 42px; font-weight: 900; margin: 0;
             background: linear-gradient(45deg, #ffffff, #ffd700, #ff8c00);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             text-transform: uppercase; letter-spacing: 16px; opacity: 0; filter: blur(15px);
-            animation: textRevealCinematic 1.2s cubic-bezier(0.2, 0, 0.2, 1) 1.2s forwards;
+            animation: textRevealCinematic 1.2s cubic-bezier(0.2, 0, 0.2, 1) 1.5s forwards;
             position: relative; z-index: 10; text-align: center;
         }
 
         .intro-slogan {
             color: #ffea79; font-size: 11px; font-weight: bold; letter-spacing: 6px;
             text-transform: uppercase; margin-top: 15px; opacity: 0;
-            animation: sloganRevealCinematic 1s ease 1.6s forwards; text-align: center; z-index: 10;
+            animation: sloganRevealCinematic 1s ease 2s forwards; text-align: center; z-index: 10;
         }
 
         @keyframes textRevealCinematic { 
@@ -332,11 +310,10 @@
         <p>Diwali Special</p>
     </div>
 
-    <!-- ================= 🌟 5-SEC CINEMATIC SKY-SHOT & BLAST SPLASH SCREEN 🌟 ================= -->
+    <!-- ================= 🚀 5-SEC REAL CANVAS SKY-SHOT FIREWORKS SPLASH ================= -->
     <div id="splash-screen">
-        <div id="skyShotsContainer" style="position: absolute; width: 100%; height: 100%; pointer-events: none; z-index: 2;"></div>
-        <div class="cinematic-flash"></div>
-        <div style="position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center;">
+        <canvas id="fireworksCanvas"></canvas>
+        <div style="position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; margin-top: 40px;">
             <h1 class="cinematic-text">EVENTSPHERE</h1>
             <p class="intro-slogan">Happy Diwali 2026 • Gujarat's Zero-Cost Ticketing</p>
         </div>
@@ -634,7 +611,7 @@
         <div class="nav-item" id="navHost" onclick="switchTab('hostView', 'navHost')"><span class="nav-icon">👤</span><span>Profile</span></div>
     </div>
 
-    <!-- ================= JAVASCRIPT (LIVE BACKEND CONNECTED) ================= -->
+    <!-- ================= JAVASCRIPT (REAL CANVAS FIREWORKS & BACKEND) ================= -->
     <script>
         const BACKEND_URL = "https://eventsphere-api-imzq.onrender.com";
         const MY_WHATSAPP = "918735840340"; 
@@ -647,34 +624,113 @@
         let userPhone = "";
         let userName = "EventSphere User";
 
-        // Generate 5-sec multi sky-shots coming from bottom
-        function launchSkyShots() {
-            const container = document.getElementById('skyShotsContainer');
-            if(!container) return;
-            
-            for(let i=0; i<8; i++) {
-                setTimeout(() => {
-                    const rocket = document.createElement('div');
-                    rocket.className = 'sky-shot-rocket';
-                    rocket.style.left = (15 + Math.random() * 70) + '%';
-                    rocket.style.animationDuration = (0.8 + Math.random() * 0.5) + 's';
-                    container.appendChild(rocket);
-                    setTimeout(() => rocket.remove(), 1200);
-                }, i * 180);
+        // REAL CANVAS FIREWORKS SKY-SHOT ENGINE
+        function initRealFireworks() {
+            const canvas = document.getElementById('fireworksCanvas');
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            let particles = [];
+            let rockets = [];
+
+            class Rocket {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = canvas.height;
+                    this.targetY = canvas.height * 0.15 + Math.random() * (canvas.height * 0.4);
+                    this.speed = 7 + Math.random() * 5;
+                    this.color = ['#ff3333', '#ffd700', '#00ffcc', '#ff8000', '#ff00ff'][Math.floor(Math.random()*5)];
+                }
+                update() {
+                    this.y -= this.speed;
+                }
+                draw() {
+                    ctx.fillStyle = this.color;
+                    ctx.fillRect(this.x, this.y, 3, 12);
+                }
             }
+
+            class Particle {
+                constructor(x, y, color) {
+                    this.x = x;
+                    this.y = y;
+                    this.color = color;
+                    const angle = Math.random() * Math.PI * 2;
+                    const speed = Math.random() * 8 + 2;
+                    this.vx = Math.cos(angle) * speed;
+                    this.vy = Math.sin(angle) * speed;
+                    this.alpha = 1;
+                    this.decay = Math.random() * 0.015 + 0.01;
+                }
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    this.vy += 0.15; // gravity
+                    this.alpha -= this.decay;
+                }
+                draw() {
+                    ctx.save();
+                    ctx.globalAlpha = Math.max(0, this.alpha);
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, 2.5, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                }
+            }
+
+            let interval = setInterval(() => {
+                if(rockets.length < 4) {
+                    rockets.push(new Rocket());
+                }
+            }, 300);
+
+            function animate() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                rockets.forEach((r, index) => {
+                    r.update();
+                    r.draw();
+                    if(r.y <= r.targetY) {
+                        // Explode into particles
+                        for(let i=0; i<60; i++) {
+                            particles.push(new Particle(r.x, r.y, r.color));
+                        }
+                        rockets.splice(index, 1);
+                    }
+                });
+
+                particles.forEach((p, index) => {
+                    p.update();
+                    p.draw();
+                    if(p.alpha <= 0) {
+                        particles.splice(index, 1);
+                    }
+                });
+
+                requestAnimationFrame(animate);
+            }
+            animate();
+
+            setTimeout(() => {
+                clearInterval(interval);
+            }, 4500);
         }
 
         window.addEventListener('load', async () => {
-            launchSkyShots();
+            initRealFireworks();
             const savedCity = localStorage.getItem('es_city');
             if(savedCity) document.getElementById('selectedCityText').innerText = savedCity;
 
-            // Exactly 5 seconds splash intro duration
+            // Exactly 5 seconds heavy sky-shot intro
             setTimeout(() => {
                 const splash = document.getElementById('splash-screen');
                 if(splash) {
                     splash.style.opacity = '0';
-                    splash.style.transform = 'scale(1.15)';
+                    splash.style.transform = 'scale(1.1)';
                     setTimeout(() => { splash.style.display = 'none'; }, 1000);
                 }
             }, 5000); 
