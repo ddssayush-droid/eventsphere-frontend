@@ -10,7 +10,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>EventSphere | Diwali Royal Edition 🪔</title>
+    <title>EventSphere | Diwali Grand Edition 🪔</title>
     
     <!-- Favicon & Logo for Google & Browsers -->
     <link rel="icon" type="image/png" href="logo.jpg">
@@ -38,16 +38,16 @@
         }
         .light-bulb {
             width: 8px; height: 12px; border-radius: 50%;
-            animation: glowLights 1s infinite alternate;
+            animation: glowLights 0.8s infinite alternate;
         }
-        .light-bulb:nth-child(odd) { background-color: #ff3333; animation-delay: 0.2s; box-shadow: 0 0 10px #ff3333; }
-        .light-bulb:nth-child(even) { background-color: #ffd700; animation-delay: 0.4s; box-shadow: 0 0 10px #ffd700; }
-        .light-bulb:nth-child(3n) { background-color: #ff9900; animation-delay: 0.6s; box-shadow: 0 0 10px #ff9900; }
-        .light-bulb:nth-child(4n) { background-color: #00ffcc; animation-delay: 0.8s; box-shadow: 0 0 10px #00ffcc; }
+        .light-bulb:nth-child(odd) { background-color: #ff1a1a; animation-delay: 0.1s; box-shadow: 0 0 12px #ff1a1a; }
+        .light-bulb:nth-child(even) { background-color: #ffd700; animation-delay: 0.3s; box-shadow: 0 0 12px #ffd700; }
+        .light-bulb:nth-child(3n) { background-color: #ff8000; animation-delay: 0.5s; box-shadow: 0 0 12px #ff8000; }
+        .light-bulb:nth-child(4n) { background-color: #00ffcc; animation-delay: 0.7s; box-shadow: 0 0 12px #00ffcc; }
 
         @keyframes glowLights {
-            0% { opacity: 0.4; transform: scale(0.8); }
-            100% { opacity: 1; transform: scale(1.3); box-shadow: 0 0 18px #fff, 0 0 30px currentColor; }
+            0% { opacity: 0.3; transform: scale(0.7); }
+            100% { opacity: 1; transform: scale(1.4); box-shadow: 0 0 20px #fff, 0 0 35px currentColor; }
         }
 
         .diwali-diya-badge {
@@ -65,86 +65,97 @@
             100% { transform: translateY(-8px); }
         }
 
-        /* ================= 🌟 PRO CINEMATIC 4-CORNER RANGOLI & FIREWORKS INTRO 🌟 ================= */
+        /* ================= 🌟 ULTRA-HEAVY CINEMATIC FIREWORKS & RANGOLI SPLASH 🌟 ================= */
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: radial-gradient(circle at center, #1f1000 0%, #000 100%);
+            background: radial-gradient(circle at center, #2b1200 0%, #000000 100%);
             z-index: 99999; display: flex; flex-direction: column;
             align-items: center; justify-content: center; overflow: hidden;
             transition: opacity 0.8s ease, transform 0.8s ease;
         }
 
-        /* 4 Corner Golden Rangolis */
+        /* Fireworks Sparks Particles Background */
+        .firework-particle {
+            position: absolute; width: 6px; height: 6px; background: #ffd700; border-radius: 50%;
+            animation: burstSparkle 1.5s ease-out infinite; opacity: 0; z-index: 1;
+        }
+        @keyframes burstSparkle {
+            0% { transform: translate(0, 0) scale(1); opacity: 1; box-shadow: 0 0 10px #ff9900; }
+            100% { transform: translate(var(--dx), var(--dy)) scale(0.2); opacity: 0; }
+        }
+
+        /* 4 Grand Corner Rangolis with Heavy Spin */
         .corner-rangoli {
-            position: absolute; font-size: 50px; color: #D4AF37; opacity: 0.8;
-            filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.8));
-            animation: pulseRangoli 2s ease-in-out infinite alternate;
+            position: absolute; font-size: 65px; color: #ffcc00; opacity: 0.9;
+            filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.9));
+            animation: spinHeavyRangoli 6s linear infinite;
             z-index: 2;
         }
-        .c-tl { top: 20px; left: 20px; animation-delay: 0s; }
-        .c-tr { top: 20px; right: 20px; animation-delay: 0.5s; }
-        .c-bl { bottom: 20px; left: 20px; animation-delay: 1s; }
-        .c-br { bottom: 20px; right: 20px; animation-delay: 1.5s; }
+        .c-tl { top: 15px; left: 15px; } 
+        .c-tr { top: 15px; right: 15px; animation-direction: reverse; } 
+        .c-bl { bottom: 15px; left: 15px; animation-direction: reverse; } 
+        .c-br { bottom: 15px; right: 15px; }
 
-        @keyframes pulseRangoli {
-            0% { transform: scale(0.9) rotate(0deg); opacity: 0.6; filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.5)); }
-            100% { transform: scale(1.1) rotate(15deg); opacity: 1; filter: drop-shadow(0 0 25px rgba(255, 215, 0, 1)); }
+        @keyframes spinHeavyRangoli {
+            0% { transform: rotate(0deg) scale(1); filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.6)); }
+            50% { transform: rotate(180deg) scale(1.15); filter: drop-shadow(0 0 30px rgba(255, 150, 0, 1)); }
+            100% { transform: rotate(360deg) scale(1); filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.6)); }
         }
 
-        /* Center Pro Diya & Sparkles Container */
+        /* Center Diya with Massive Glow */
         .intro-diya-container {
-            width: 140px; height: 140px;
-            background: radial-gradient(circle, rgba(212,175,55,0.3) 0%, rgba(0,0,0,0.8) 80%);
+            width: 160px; height: 160px;
+            background: radial-gradient(circle, rgba(255,165,0,0.4) 0%, rgba(0,0,0,0.9) 75%);
             border-radius: 50%; position: relative;
             display: flex; align-items: center; justify-content: center;
-            border: 2px solid #F5D76E;
-            box-shadow: 0 0 50px rgba(212, 175, 55, 0.8), inset 0 0 20px rgba(255,215,0,0.5);
-            animation: dropDiya 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards, floatDiyaCenter 2s ease-in-out infinite alternate 1.2s;
-            opacity: 0; margin-bottom: 25px;
+            border: 3px solid #ffcc00;
+            box-shadow: 0 0 70px rgba(255, 140, 0, 0.9), inset 0 0 30px rgba(255,215,0,0.8);
+            animation: dropDiyaPro 1s cubic-bezier(0.25, 1, 0.5, 1) forwards, pulseDiyaCenter 1.5s ease-in-out infinite alternate 1s;
+            opacity: 0; margin-bottom: 25px; z-index: 10;
         }
         
         .diya-flame {
-            font-size: 60px;
-            animation: flickerFlame 0.3s ease-in-out infinite alternate;
-            filter: drop-shadow(0 0 20px #ff9900) drop-shadow(0 0 40px #ff3300);
+            font-size: 75px;
+            animation: superFlicker 0.25s ease-in-out infinite alternate;
+            filter: drop-shadow(0 0 25px #ff6600) drop-shadow(0 0 50px #ff3300) drop-shadow(0 0 80px #ffff00);
         }
 
-        @keyframes dropDiya { 
-            0% { transform: translateY(-100vh) scale(2); opacity: 0; } 
-            70% { transform: translateY(15px) scale(0.9); opacity: 1; } 
-            100% { transform: translateY(0) scale(1); opacity: 1; } 
+        @keyframes dropDiyaPro { 
+            0% { transform: translateY(-120vh) scale(2.5) rotate(-45deg); opacity: 0; } 
+            70% { transform: translateY(20px) scale(0.85) rotate(10deg); opacity: 1; } 
+            100% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; } 
         }
-        @keyframes floatDiyaCenter { 
-            0% { transform: translateY(0) scale(1); box-shadow: 0 0 40px rgba(212,175,55,0.7); } 
-            100% { transform: translateY(-12px) scale(1.05); box-shadow: 0 0 70px rgba(255,215,0,1); } 
+        @keyframes pulseDiyaCenter { 
+            0% { transform: scale(1); box-shadow: 0 0 50px rgba(255,140,0,0.8); } 
+            100% { transform: scale(1.12); box-shadow: 0 0 90px rgba(255,215,0,1), 0 0 120px rgba(255,69,0,0.8); } 
         }
-        @keyframes flickerFlame {
-            0% { transform: scale(1) rotate(-2deg); opacity: 0.9; }
-            100% { transform: scale(1.1) rotate(2deg); opacity: 1; }
+        @keyframes superFlicker {
+            0% { transform: scale(0.95) rotate(-3deg); opacity: 0.85; }
+            100% { transform: scale(1.15) rotate(3deg); opacity: 1; }
         }
 
         .cinematic-text {
-            font-size: 32px; font-weight: 900; margin: 0;
-            background: linear-gradient(45deg, #fff, #D4AF37, #ffaa00);
+            font-size: 34px; font-weight: 900; margin: 0;
+            background: linear-gradient(45deg, #ffffff, #ffd700, #ff8c00);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            text-transform: uppercase; letter-spacing: 12px; opacity: 0; filter: blur(10px);
-            animation: textRevealPremium 1.2s cubic-bezier(0.2, 0, 0.2, 1) 0.6s forwards;
-            position: relative; z-index: 1; text-align: center;
+            text-transform: uppercase; letter-spacing: 14px; opacity: 0; filter: blur(12px);
+            animation: textRevealPro 1.2s cubic-bezier(0.2, 0, 0.2, 1) 0.5s forwards;
+            position: relative; z-index: 10; text-align: center;
         }
 
         .intro-slogan {
-            color: var(--gold-light); font-size: 11px; font-weight: bold; letter-spacing: 4px;
-            text-transform: uppercase; margin-top: 12px; opacity: 0;
-            animation: sloganReveal 1s ease 1s forwards; text-align: center;
+            color: #ffea79; font-size: 11px; font-weight: bold; letter-spacing: 5px;
+            text-transform: uppercase; margin-top: 14px; opacity: 0;
+            animation: sloganRevealPro 1s ease 0.9s forwards; text-align: center; z-index: 10;
         }
 
-        @keyframes textRevealPremium { 
-            0% { opacity: 0; letter-spacing: 25px; filter: blur(15px); transform: translateY(20px); } 
-            100% { opacity: 1; letter-spacing: 5px; filter: blur(0); transform: translateY(0); } 
+        @keyframes textRevealPro { 
+            0% { opacity: 0; letter-spacing: 30px; filter: blur(20px); transform: translateY(25px); } 
+            100% { opacity: 1; letter-spacing: 6px; filter: blur(0); transform: translateY(0); } 
         }
-        @keyframes sloganReveal { 
-            0% { opacity: 0; transform: translateY(10px); } 
-            100% { opacity: 0.95; transform: translateY(0); } 
+        @keyframes sloganRevealPro { 
+            0% { opacity: 0; transform: translateY(15px); } 
+            100% { opacity: 1; transform: translateY(0); } 
         }
         /* ================= END CINEMATIC SPLASH ================= */
 
@@ -353,8 +364,10 @@
         <p>Diwali Special</p>
     </div>
 
-    <!-- ================= 🌟 ROYAL 4-CORNER RANGOLI & DIYA SPLASH SCREEN 🌟 ================= -->
+    <!-- ================= 🌟 ULTRA-HEAVY CINEMATIC FIREWORKS & RANGOLI SPLASH 🌟 ================= -->
     <div id="splash-screen">
+        <div id="fireworksContainer" style="position: absolute; width: 100%; height: 100%; pointer-events: none; z-index: 1;"></div>
+
         <div class="corner-rangoli c-tl">❊</div>
         <div class="corner-rangoli c-tr">❊</div>
         <div class="corner-rangoli c-bl">❊</div>
@@ -672,7 +685,28 @@
         let userPhone = "";
         let userName = "EventSphere User";
 
+        // Generate dynamic fireworks sparkles on splash load
+        function createFireworks() {
+            const container = document.getElementById('fireworksContainer');
+            if(!container) return;
+            for(let i=0; i<30; i++) {
+                const p = document.createElement('div');
+                p.className = 'firework-particle';
+                const angle = Math.random() * Math.PI * 2;
+                const distance = 80 + Math.random() * 220;
+                const dx = Math.cos(angle) * distance + 'px';
+                const dy = Math.sin(angle) * distance + 'px';
+                p.style.left = '50%';
+                p.style.top = '50%';
+                p.style.setProperty('--dx', dx);
+                p.style.setProperty('--dy', dy);
+                p.style.animationDelay = (Math.random() * 0.5) + 's';
+                container.appendChild(p);
+            }
+        }
+
         window.addEventListener('load', async () => {
+            createFireworks();
             const savedCity = localStorage.getItem('es_city');
             if(savedCity) document.getElementById('selectedCityText').innerText = savedCity;
 
@@ -1173,7 +1207,8 @@
             e.preventDefault();
             const org = document.querySelector('input[name="Organizer_Name"]').value;
             const mob = document.querySelector('input[name="Mobile_Number"]').value;
-            const title = document.querySelector('input[name="Event_Title"]').value;
+            const title = document.querySelector('input[name="Title"]').value; // fixed or standard
+            // ... rest of form ...
             const dist = document.querySelector('select[name="District"]').value;
             const venue = document.querySelector('textarea[name="Venue_Address"]').value;
             const details = document.querySelector('textarea[name="Event_Details"]').value;
