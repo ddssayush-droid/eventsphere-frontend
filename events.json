@@ -45,7 +45,7 @@
         "description": "Experience premium sound, professional dance floor, and vibrant cultural celebrations.",
         "img": "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=800&q=80",
         "categories": [
-            { "name": "General Pass", "price": 299 },
+            { "name": "General Pass", "price": 1},
             { "name": "VIP Couple Pass", "price": 899 }
         ],
         "availableDates": ["2026-12-12", "2026-12-13"]
