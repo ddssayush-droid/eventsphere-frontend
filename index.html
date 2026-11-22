@@ -10,7 +10,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>EventSphere | Diwali Real Sky-Shot Edition 🪔</title>
+    <title>EventSphere | Premium Events At 0% Fees</title>
     
     <!-- Favicon & Logo for Google & Browsers -->
     <link rel="icon" type="image/png" href="logo.jpg">
@@ -31,82 +31,81 @@
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <style>
-        /* ================= 🪔 DIWALI LED LIGHTS SERIES 🪔 ================= */
-        .diwali-lights-bar {
-            position: fixed; top: 0; left: 0; width: 100%; height: 18px;
-            background: transparent; z-index: 9999; display: flex; justify-content: space-around; pointer-events: none;
-        }
-        .light-bulb {
-            width: 8px; height: 12px; border-radius: 50%;
-            animation: glowLights 0.8s infinite alternate;
-        }
-        .light-bulb:nth-child(odd) { background-color: #ff1a1a; animation-delay: 0.1s; box-shadow: 0 0 12px #ff1a1a; }
-        .light-bulb:nth-child(even) { background-color: #ffd700; animation-delay: 0.3s; box-shadow: 0 0 12px #ffd700; }
-        .light-bulb:nth-child(3n) { background-color: #ff8000; animation-delay: 0.5s; box-shadow: 0 0 12px #ff8000; }
-        .light-bulb:nth-child(4n) { background-color: #00ffcc; animation-delay: 0.7s; box-shadow: 0 0 12px #00ffcc; }
-
-        @keyframes glowLights {
-            0% { opacity: 0.3; transform: scale(0.7); }
-            100% { opacity: 1; transform: scale(1.4); box-shadow: 0 0 20px #fff, 0 0 35px currentColor; }
-        }
-
-        .diwali-diya-badge {
-            position: fixed; bottom: 20px; right: 20px;
-            background: rgba(20, 20, 20, 0.95); border: 1px solid var(--gold);
-            padding: 8px 14px; border-radius: 30px; display: flex; align-items: center; gap: 8px;
-            z-index: 999; box-shadow: 0 4px 20px rgba(212, 175, 55, 0.6);
-            animation: floatDiya 2s ease-in-out infinite alternate;
-        }
-        .diwali-diya-badge span { font-size: 18px; }
-        .diwali-diya-badge p { margin: 0; font-size: 10px; color: var(--gold); font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
-
-        @keyframes floatDiya {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-8px); }
-        }
-
-        /* ================= 🚀 REAL 5-SEC SKY-SHOT FIREWORKS INTRO 🚀 ================= */
+        /* ================= 🎬 ULTRA-PREMIUM BLACK & GOLD TICKET INTRO 🎬 ================= */
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: radial-gradient(circle at center, #0f0700 0%, #000000 100%);
+            background: radial-gradient(circle at center, #141105 0%, #000000 100%);
             z-index: 99999; display: flex; flex-direction: column;
             align-items: center; justify-content: center; overflow: hidden;
-            transition: opacity 1s ease, transform 1s ease;
+            transition: opacity 0.6s ease, transform 0.6s ease;
         }
 
-        /* Canvas for Real Sky-Shot Fireworks */
-        #fireworksCanvas {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2;
+        .intro-ticket {
+            width: 210px; height: 105px;
+            background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 35%, #B38728 70%, #AA771C 100%);
+            border-radius: 12px; position: relative;
+            display: flex; align-items: center; justify-content: center;
+            border: 2px solid #F5D76E;
+            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.65), inset 0 0 15px rgba(255,255,255,0.5);
+            animation: dropTicket 1s cubic-bezier(0.25, 1, 0.5, 1) forwards, floatTicket 2s ease-in-out infinite alternate 1s;
+            opacity: 0; margin-bottom: 25px; overflow: hidden;
+        }
+        
+        .intro-ticket::before, .intro-ticket::after {
+            content: ''; position: absolute; width: 24px; height: 24px;
+            background: #050505; border-radius: 50%;
+            top: 50%; transform: translateY(-50%); box-shadow: inset 0 0 8px rgba(0,0,0,0.9); z-index: 5;
+        }
+        .intro-ticket::before { left: -12px; }
+        .intro-ticket::after { right: -12px; }
+
+        /* Metallic Shimmer Sweep across VIP Ticket */
+        .ticket-shimmer {
+            position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            transform: skewX(-25deg);
+            animation: shimmerSweep 2.2s infinite 1s;
+        }
+        @keyframes shimmerSweep {
+            0% { left: -100%; }
+            100% { left: 200%; }
         }
 
-        /* Cinematic Text reveal after sky shots */
+        .intro-ticket-content { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 0 24px; z-index: 2; }
+        .intro-text-side { display: flex; flex-direction: column; text-align: left; }
+        .intro-text-side span.bold { font-size: 13px; color: #000; font-weight: 900; letter-spacing: 1px; line-height: 1.2; text-shadow: 0 1px 1px rgba(255,255,255,0.5); }
+        .intro-text-side span.sub { font-size: 9px; color: #111; font-weight: 800; letter-spacing: 3px; margin-top: 3px; }
+
+        .intro-qr-corner {
+            width: 50px; height: 50px; border: 2px solid #000; border-radius: 6px;
+            background: #fff; padding: 3px; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+        }
+        .intro-qr-corner img { width: 100%; height: 100%; object-fit: contain; }
+
         .cinematic-text {
-            font-size: 42px; font-weight: 900; margin: 0;
-            background: linear-gradient(45deg, #ffffff, #ffd700, #ff8c00);
+            font-size: 32px; font-weight: 900; margin: 0;
+            background: linear-gradient(45deg, #ffffff, #D4AF37, #F5D76E);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            text-transform: uppercase; letter-spacing: 16px; opacity: 0; filter: blur(15px);
-            animation: textRevealCinematic 1.2s cubic-bezier(0.2, 0, 0.2, 1) 1.5s forwards;
-            position: relative; z-index: 10; text-align: center;
+            text-transform: uppercase; letter-spacing: 15px; opacity: 0; filter: blur(10px);
+            animation: textRevealPremium 1.2s cubic-bezier(0.2, 0, 0.2, 1) 0.5s forwards;
+            position: relative; z-index: 1; text-align: center;
         }
 
         .intro-slogan {
-            color: #ffea79; font-size: 11px; font-weight: bold; letter-spacing: 6px;
-            text-transform: uppercase; margin-top: 15px; opacity: 0;
-            animation: sloganRevealCinematic 1s ease 2s forwards; text-align: center; z-index: 10;
+            color: var(--gold-light); font-size: 10px; font-weight: bold; letter-spacing: 3.5px;
+            text-transform: uppercase; margin-top: 10px; opacity: 0;
+            animation: sloganReveal 1s ease 0.9s forwards; text-align: center;
         }
 
-        @keyframes textRevealCinematic { 
-            0% { opacity: 0; letter-spacing: 35px; filter: blur(20px); transform: scale(0.8) translateY(20px); } 
-            100% { opacity: 1; letter-spacing: 6px; filter: blur(0); transform: scale(1) translateY(0); } 
-        }
-        @keyframes sloganRevealCinematic { 
-            0% { opacity: 0; transform: translateY(15px); } 
-            100% { opacity: 1; transform: translateY(0); } 
-        }
+        @keyframes dropTicket { 0% { transform: translateY(-100vh) rotate(-25deg) scale(1.4); opacity: 0; } 60% { transform: translateY(15px) rotate(6deg) scale(0.95); opacity: 1; } 100% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; } }
+        @keyframes floatTicket { 0% { transform: translateY(0) rotate(0deg); box-shadow: 0 15px 35px rgba(212,175,55,0.6); } 100% { transform: translateY(-8px) rotate(1.5deg); box-shadow: 0 25px 45px rgba(212,175,55,0.95); } }
+        @keyframes textRevealPremium { 0% { opacity: 0; letter-spacing: 25px; filter: blur(15px); transform: translateY(15px); } 100% { opacity: 1; letter-spacing: 4px; filter: blur(0); transform: translateY(0); } }
+        @keyframes sloganReveal { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 0.9; transform: translateY(0); } }
         /* ================= END CINEMATIC SPLASH ================= */
 
         /* ================= BASE STYLES & THEME ================= */
-        :root { --bg-dark: #050505; --bg-card: #111111; --gold: #D4AF37; --gold-light: #F5D76E; --text-main: #FFFFFF; --text-muted: #888888; --success: #00e676; }
+        :root { --bg-dark: #020202; --bg-card: #111111; --gold: #D4AF37; --gold-light: #F5D76E; --text-main: #FFFFFF; --text-muted: #888888; --success: #00e676; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-dark); color: var(--text-main); margin: 0; padding: 0; padding-bottom: 80px; overflow-x: hidden; }
 
         .view-section { display: none; animation: fadeIn 0.3s ease-in-out; }
@@ -114,7 +113,7 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* ================= HEADER ================= */
-        header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; position: sticky; top: 0; background: rgba(5, 5, 5, 0.92); backdrop-filter: blur(12px); z-index: 100; border-bottom: 1px solid rgba(212, 175, 55, 0.2); }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; position: sticky; top: 0; background: rgba(2, 2, 2, 0.92); backdrop-filter: blur(12px); z-index: 100; border-bottom: 1px solid rgba(212, 175, 55, 0.2); }
         .brand h1 { margin: 0; font-size: 18px; font-weight: 900; background: linear-gradient(45deg, var(--gold-light), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px; }
         .header-right { display: flex; align-items: center; gap: 8px; }
         .city-select-btn, .my-tickets-top-btn { color: #fff; font-size: 11px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 4px; background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 20px; border: 1px solid rgba(212,175,55,0.3); }
@@ -153,11 +152,12 @@
         .event-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 5px 16px 20px 16px; max-width: 1200px; margin: 0 auto; }
         
         .event-card { 
-            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); border-radius: 8px; 
+            background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(15px); border-radius: 8px; 
             overflow: hidden; position: relative; cursor: pointer; display: flex; flex-direction: column; 
-            border: 1px solid rgba(212, 175, 55, 0.3); box-shadow: 0 4px 12px rgba(212,175,55,0.15); 
-            transition: transform 0.2s; width: 100%; box-sizing: border-box; 
+            border: 1px solid rgba(212, 175, 55, 0.3); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6); 
+            transition: transform 0.2s, border-color 0.2s; width: 100%; box-sizing: border-box; 
         }
+        .event-card:hover { border-color: var(--gold); }
         .event-card:active { transform: scale(0.96); } 
         .event-img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 8px 8px 0 0; }
         .event-details { padding: 8px 8px; flex: 1; display: flex; flex-direction: column; justify-content: flex-start; }
@@ -179,7 +179,7 @@
         .checkout-container { padding: 16px; padding-bottom: 100px; max-width: 600px; margin: 0 auto;}
         .checkout-bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; width: 100%; max-width: 600px; margin: 0 auto; background: var(--bg-card); border-top: 1px solid var(--gold); padding: 12px 16px; box-sizing: border-box; display: flex; justify-content: space-between; align-items: center; z-index: 200; border-radius: 12px 12px 0 0;}
         
-        .checkout-box { background: var(--bg-card); border: 1px solid rgba(255,255,255,0.05); border-radius: 10px; padding: 16px; margin-bottom: 15px; }
+        .checkout-box { background: var(--bg-card); border: 1px solid rgba(212, 175, 55, 0.15); border-radius: 10px; padding: 16px; margin-bottom: 15px; }
         .checkout-box h3 { margin: 0 0 10px 0; font-size: 13px; color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; text-transform: uppercase;}
         .date-scroll { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; padding-bottom: 5px; margin-top: 8px;}
         .date-scroll::-webkit-scrollbar { display: none; }
@@ -204,11 +204,11 @@
         /* Forms & Inputs */
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 6px; color: var(--gold-light); font-size: 10px; font-weight: 600; text-transform: uppercase;}
-        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 12px; background-color: var(--bg-card); border: 1px solid rgba(212, 175, 55, 0.2); color: #fff; border-radius: 8px; box-sizing: border-box; font-size: 13px; outline: none; }
-        .submit-btn { background: var(--gold); color: #000; border: none; padding: 12px; width: 100%; font-size: 14px; font-weight: bold; border-radius: 8px; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 12px; background-color: var(--bg-card); border: 1px solid rgba(212, 175, 55, 0.25); color: #fff; border-radius: 8px; box-sizing: border-box; font-size: 13px; outline: none; }
+        .submit-btn { background: linear-gradient(90deg, #BF953F, #FCF6BA, #B38728); color: #000; border: none; padding: 12px; width: 100%; font-size: 14px; font-weight: 900; border-radius: 8px; cursor: pointer; text-transform: uppercase; margin-top: 10px; box-shadow: 0 4px 12px rgba(212,175,55,0.3); }
 
         /* Bottom Navigation */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; width: 100%; max-width: 600px; margin: 0 auto; background: rgba(5, 5, 5, 0.95); backdrop-filter: blur(10px); display: flex; justify-content: space-around; padding: 8px 0; border-top: 1px solid rgba(212,175,55,0.2); z-index: 100; border-radius: 20px 20px 0 0;}
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; width: 100%; max-width: 600px; margin: 0 auto; background: rgba(5, 5, 5, 0.95); backdrop-filter: blur(10px); display: flex; justify-content: space-around; padding: 8px 0; border-top: 1px solid rgba(212,175,55,0.25); z-index: 100; border-radius: 20px 20px 0 0;}
         .nav-item { color: var(--text-muted); text-align: center; font-size: 9px; cursor: pointer; display: flex; flex-direction: column; gap: 2px; flex: 1; }
         .nav-item.active { color: var(--gold); }
         .nav-icon { font-size: 16px; }
@@ -295,28 +295,22 @@
 </head>
 <body>
 
-    <!-- ================= 🪔 DIWALI LED LIGHTS SERIES 🪔 ================= -->
-    <div class="diwali-lights-bar">
-        <div class="light-bulb"></div><div class="light-bulb"></div><div class="light-bulb"></div>
-        <div class="light-bulb"></div><div class="light-bulb"></div><div class="light-bulb"></div>
-        <div class="light-bulb"></div><div class="light-bulb"></div><div class="light-bulb"></div>
-        <div class="light-bulb"></div><div class="light-bulb"></div><div class="light-bulb"></div>
-        <div class="light-bulb"></div><div class="light-bulb"></div><div class="light-bulb"></div>
-    </div>
-
-    <!-- FLOATING DIYA BADGE -->
-    <div class="diwali-diya-badge">
-        <span>🪔</span>
-        <p>Diwali Special</p>
-    </div>
-
-    <!-- ================= 🚀 5-SEC REAL CANVAS SKY-SHOT FIREWORKS SPLASH ================= -->
+    <!-- ================= 🎬 ULTRA-PREMIUM BLACK & GOLD SPLASH SCREEN ================= -->
     <div id="splash-screen">
-        <canvas id="fireworksCanvas"></canvas>
-        <div style="position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; margin-top: 40px;">
-            <h1 class="cinematic-text">EVENTSPHERE</h1>
-            <p class="intro-slogan">Happy Diwali 2026 • Gujarat's Zero-Cost Ticketing</p>
+        <div class="intro-ticket">
+            <div class="ticket-shimmer"></div>
+            <div class="intro-ticket-content">
+                <div class="intro-text-side">
+                    <span class="bold">INDIA'S 1ST</span>
+                    <span class="sub">0% FEE PASS</span>
+                </div>
+                <div class="intro-qr-corner">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=EventSphereVIP" alt="QR">
+                </div>
+            </div>
         </div>
+        <h1 class="cinematic-text">EVENTSPHERE</h1>
+        <p class="intro-slogan">Gujarat's Zero-Cost Ticketing Platform</p>
     </div>
 
     <!-- HEADER -->
@@ -335,7 +329,7 @@
     <!-- ================= 1. HOME VIEW ================= -->
     <div id="homeView" class="view-section active-view">
         <div class="promo-slider-container">
-            <h2 class="glowing-title">🪔 Diwali Special Events 🪔</h2>
+            <h2 class="glowing-title">✨ Popular Events ✨</h2>
             <div class="promo-slider" id="autoPromoSlider"></div>
         </div>
         <div class="slider-dots" id="promoSliderDots"></div>
@@ -466,7 +460,7 @@
             <div class="checkout-box">
                 <h3>Offers & Promos</h3>
                 <div class="promo-flex">
-                    <input type="text" id="chk-promo-code" placeholder="Enter DIWALI50">
+                    <input type="text" id="chk-promo-code" placeholder="Enter GARBA50">
                     <button onclick="applyChkPromo()">Apply</button>
                 </div>
                 <p id="chk-promo-msg" style="font-size: 11px; color: var(--success); font-weight:bold; margin: 8px 0 0 0; display: none;">Promo applied!</p>
@@ -542,7 +536,7 @@
                 <div class="modal-img-container"><img id="detailImg" class="modal-img" src="" alt="Event Cover"></div>
                 <div class="modal-scroll-area">
                     <h2 id="detailTitle">Event Title</h2>
-                    <div class="tags-row"><div class="tag-pill">Diwali Special</div><div class="tag-pill">Fast Filling</div></div>
+                    <div class="tags-row"><div class="tag-pill">Premium Event</div><div class="tag-pill">Fast Filling</div></div>
                     <h3 style="color: var(--gold); margin-bottom: 10px; font-size: 13px; text-transform: uppercase;">About Event</h3>
                     <p id="detailDescription" style="color: #ccc; font-size: 12px; line-height: 1.5; margin-bottom: 20px;"></p>
                 </div>
@@ -600,18 +594,18 @@
         <p class="footer-links">
             <span onclick="openMyTicketsModal()">View My Tickets</span>
         </p>
-        <p class="footer-text">© 2026 EventSphere Gujarat. Happy Diwali 🪔</p>
+        <p class="footer-text">© 2026 EventSphere Gujarat. All rights reserved.</p>
     </div>
 
     <!-- BOTTOM NAVIGATION -->
     <div class="bottom-nav">
-        <div class="nav-item active" id="navHome" onclick="switchTab('homeView', 'navHome')"><span class="nav-icon">🪔</span><span>Home</span></div>
+        <div class="nav-item active" id="navHome" onclick="switchTab('homeView', 'navHome')"><span class="nav-icon">✨</span><span>Home</span></div>
         <div class="nav-item" id="navExplore" onclick="switchTab('exploreView', 'navExplore')"><span class="nav-icon">🔍</span><span>Explore</span></div>
         <div class="nav-item" id="navDining" onclick="switchTab('diningView', 'navDining')"><span class="nav-icon">🍽️</span><span>Dining</span></div>
         <div class="nav-item" id="navHost" onclick="switchTab('hostView', 'navHost')"><span class="nav-icon">👤</span><span>Profile</span></div>
     </div>
 
-    <!-- ================= JAVASCRIPT (REAL CANVAS FIREWORKS & BACKEND) ================= -->
+    <!-- ================= JAVASCRIPT (LIVE BACKEND CONNECTED) ================= -->
     <script>
         const BACKEND_URL = "https://eventsphere-api-imzq.onrender.com";
         const MY_WHATSAPP = "918735840340"; 
@@ -624,116 +618,18 @@
         let userPhone = "";
         let userName = "EventSphere User";
 
-        // REAL CANVAS FIREWORKS SKY-SHOT ENGINE
-        function initRealFireworks() {
-            const canvas = document.getElementById('fireworksCanvas');
-            if(!canvas) return;
-            const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-
-            let particles = [];
-            let rockets = [];
-
-            class Rocket {
-                constructor() {
-                    this.x = Math.random() * canvas.width;
-                    this.y = canvas.height;
-                    this.targetY = canvas.height * 0.15 + Math.random() * (canvas.height * 0.4);
-                    this.speed = 7 + Math.random() * 5;
-                    this.color = ['#ff3333', '#ffd700', '#00ffcc', '#ff8000', '#ff00ff'][Math.floor(Math.random()*5)];
-                }
-                update() {
-                    this.y -= this.speed;
-                }
-                draw() {
-                    ctx.fillStyle = this.color;
-                    ctx.fillRect(this.x, this.y, 3, 12);
-                }
-            }
-
-            class Particle {
-                constructor(x, y, color) {
-                    this.x = x;
-                    this.y = y;
-                    this.color = color;
-                    const angle = Math.random() * Math.PI * 2;
-                    const speed = Math.random() * 8 + 2;
-                    this.vx = Math.cos(angle) * speed;
-                    this.vy = Math.sin(angle) * speed;
-                    this.alpha = 1;
-                    this.decay = Math.random() * 0.015 + 0.01;
-                }
-                update() {
-                    this.x += this.vx;
-                    this.y += this.vy;
-                    this.vy += 0.15; // gravity
-                    this.alpha -= this.decay;
-                }
-                draw() {
-                    ctx.save();
-                    ctx.globalAlpha = Math.max(0, this.alpha);
-                    ctx.fillStyle = this.color;
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, 2.5, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.restore();
-                }
-            }
-
-            let interval = setInterval(() => {
-                if(rockets.length < 4) {
-                    rockets.push(new Rocket());
-                }
-            }, 300);
-
-            function animate() {
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                rockets.forEach((r, index) => {
-                    r.update();
-                    r.draw();
-                    if(r.y <= r.targetY) {
-                        // Explode into particles
-                        for(let i=0; i<60; i++) {
-                            particles.push(new Particle(r.x, r.y, r.color));
-                        }
-                        rockets.splice(index, 1);
-                    }
-                });
-
-                particles.forEach((p, index) => {
-                    p.update();
-                    p.draw();
-                    if(p.alpha <= 0) {
-                        particles.splice(index, 1);
-                    }
-                });
-
-                requestAnimationFrame(animate);
-            }
-            animate();
-
-            setTimeout(() => {
-                clearInterval(interval);
-            }, 4500);
-        }
-
         window.addEventListener('load', async () => {
-            initRealFireworks();
             const savedCity = localStorage.getItem('es_city');
             if(savedCity) document.getElementById('selectedCityText').innerText = savedCity;
 
-            // Exactly 5 seconds heavy sky-shot intro
             setTimeout(() => {
                 const splash = document.getElementById('splash-screen');
                 if(splash) {
                     splash.style.opacity = '0';
-                    splash.style.transform = 'scale(1.1)';
-                    setTimeout(() => { splash.style.display = 'none'; }, 1000);
+                    splash.style.transform = 'scale(1.08)';
+                    setTimeout(() => { splash.style.display = 'none'; }, 600);
                 }
-            }, 5000); 
+            }, 2800); 
             
             initCities();
             await loadEvents();
@@ -774,7 +670,7 @@
                 listEvents = validEvents.slice(4);
 
                 renderSlider();
-                document.getElementById("eventList").innerHTML = listEvents.map(e => createCardHTML(e, 'DIWALI SPECIAL')).join('');
+                document.getElementById("eventList").innerHTML = listEvents.map(e => createCardHTML(e, 'LIVE')).join('');
 
                 const diningList = document.getElementById("diningList");
                 if (diningList) {
@@ -786,7 +682,7 @@
             }
         }
 
-        function createCardHTML(e, badgeText = "DIWALI SPECIAL") {
+        function createCardHTML(e, badgeText = "LIVE") {
             const imgUrl = e.img || "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=800&q=80";
             return `
             <div class="event-card" onclick="openDetails(${e.id})">
@@ -807,7 +703,7 @@
         function shareEventCard(eventId, title, venue) {
             const currentUrl = window.location.href.split('?')[0];
             const directLink = `${currentUrl}?event=${eventId}`;
-            const shareText = `🪔 Check out this amazing Diwali event on EventSphere!\n\n*${title}*\n📍 Venue: ${venue}\n\n👉 Tap to view details & book:\n${directLink}`;
+            const shareText = `🔥 Check out this amazing event on EventSphere!\n\n*${title}*\n📍 Venue: ${venue}\n\n👉 Tap to view details & book:\n${directLink}`;
             
             if (navigator.share) {
                 navigator.share({ title: title, text: shareText, url: directLink }).catch(err => console.log('Share canceled'));
@@ -820,7 +716,7 @@
         function renderSlider() {
             const slider = document.getElementById('autoPromoSlider');
             const dotsContainer = document.getElementById('promoSliderDots');
-            slider.innerHTML = sliderEvents.map(e => createCardHTML(e, 'FESTIVE')).join('');
+            slider.innerHTML = sliderEvents.map(e => createCardHTML(e, 'POPULAR')).join('');
             dotsContainer.innerHTML = sliderEvents.map((_, i) => `<div class="dot ${i === 0 ? 'active-dot' : ''}"></div>`).join('');
         }
 
@@ -829,13 +725,13 @@
             el.classList.add('active');
             let filtered = listEvents;
             if (cat !== 'All') filtered = filtered.filter(e => JSON.stringify(e).toLowerCase().includes(cat.toLowerCase()));
-            document.getElementById("eventList").innerHTML = filtered.length ? filtered.map(e => createCardHTML(e, 'SPECIAL')).join('') : `<p style="text-align:center; color:var(--text-muted); grid-column:1/-1;">No events found</p>`;
+            document.getElementById("eventList").innerHTML = filtered.length ? filtered.map(e => createCardHTML(e, 'LIVE')).join('') : `<p style="text-align:center; color:var(--text-muted); grid-column:1/-1;">No events found</p>`;
         }
 
         function performSearch() {
             const query = document.getElementById('searchInput').value.toLowerCase();
             const res = listEvents.filter(e => e.title.toLowerCase().includes(query) || e.venue.toLowerCase().includes(query));
-            document.getElementById('searchResultsList').innerHTML = res.length ? res.map(e => createCardHTML(e, 'SPECIAL')).join('') : `<p style="text-align:center; color:var(--gold); grid-column:1/-1;">No results found</p>`;
+            document.getElementById('searchResultsList').innerHTML = res.length ? res.map(e => createCardHTML(e, 'LIVE')).join('') : `<p style="text-align:center; color:var(--gold); grid-column:1/-1;">No results found</p>`;
         }
 
         function switchTab(viewId, navId) {
@@ -855,7 +751,7 @@
             document.getElementById('detailVenue').innerText = event.venue;
             document.getElementById('detailTime').innerText = (event.date ? event.date + " | " : "") + event.time;
             document.getElementById('detailDuration').innerText = event.duration || "Event";
-            document.getElementById('detailDescription').innerText = event.description || "Celebrate this Diwali with the biggest premium events in Gujarat. Bookings are open.";
+            document.getElementById('detailDescription').innerText = event.description || "Experience the biggest premium events in Gujarat. Bookings are open.";
             if(event.categories && event.categories.length > 0) {
                 document.getElementById('detailPriceStart').innerText = `₹${event.categories[0].price} onwards`;
             }
@@ -1057,9 +953,9 @@
 
         function applyChkPromo() {
             let code = document.getElementById('chk-promo-code').value.toUpperCase();
-            if(code === "DIWALI50" || code === "GARBA50") {
+            if(code === "GARBA50" || code === "ES50") {
                 chkState.discount = 50;
-                document.getElementById('chk-promo-msg').innerText = "₹50 Diwali Discount Applied!";
+                document.getElementById('chk-promo-msg').innerText = "₹50 Discount Applied!";
                 document.getElementById('chk-promo-msg').style.display = "block";
                 document.getElementById('chk-promo-msg').style.color = "#00e676";
             } else {
@@ -1115,7 +1011,7 @@
                     "key": RAZORPAY_KEY,
                     "amount": orderData.order ? orderData.order.amount : finalTotal * 100, 
                     "currency": "INR",
-                    "name": "EventSphere Diwali Edition",
+                    "name": "EventSphere Tickets",
                     "description": `Pass for ${chkState.eventName} (${chkState.category})`,
                     "order_id": orderData.order ? orderData.order.id : undefined,
                     "handler": async function (response){
@@ -1156,14 +1052,14 @@
                     saveTicketToStorage(data.ticket);
                 } else {
                     saveTicketToStorage({
-                        passId: 'ES-DIWALI-' + Math.floor(100000 + Math.random() * 900000),
+                        passId: 'ES-' + Math.floor(100000 + Math.random() * 900000),
                         eventName: chkState.eventName,
                         category: chkState.category,
                         date: chkState.date,
                         time: chkState.time,
                         qty: chkState.qty,
                         total: finalTotal,
-                        qrCode: `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=ES-DIWALI-${paymentId}`
+                        qrCode: `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=ES-${paymentId}`
                     });
                 }
             } catch (err) {
@@ -1173,14 +1069,14 @@
 
         function saveTicketToStorage(ticketDetails) {
             let myTickets = JSON.parse(localStorage.getItem('es_user_tickets') || '[]');
-            if(!ticketDetails.passId) ticketDetails.passId = 'ES-DIWALI-' + Math.floor(100000 + Math.random() * 900000);
+            if(!ticketDetails.passId) ticketDetails.passId = 'ES-' + Math.floor(100000 + Math.random() * 900000);
             if(!ticketDetails.qrCode) ticketDetails.qrCode = `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${ticketDetails.passId}`;
             ticketDetails.bookedOn = new Date().toLocaleDateString();
             myTickets.push(ticketDetails);
             localStorage.setItem('es_user_tickets', JSON.stringify(myTickets));
 
             document.getElementById('successTicketDetails').innerHTML = `
-                <h3 style="color: var(--accent); margin-bottom:6px;">${ticketDetails.eventName || chkState.eventName}</h3>
+                <h3 style="color: var(--gold); margin-bottom:6px;">${ticketDetails.eventName || chkState.eventName}</h3>
                 <p style="margin: 4px 0; font-size:12px;"><b>Pass ID:</b> ${ticketDetails.passId}</p>
                 <p style="margin: 4px 0; font-size:12px;"><b>Category:</b> ${ticketDetails.category || chkState.category}</p>
                 <p style="margin: 4px 0; font-size:12px;"><b>Date:</b> ${ticketDetails.date || chkState.date}</p>
@@ -1228,7 +1124,7 @@
             const venue = document.querySelector('textarea[name="Venue_Address"]').value;
             const details = document.querySelector('textarea[name="Event_Details"]').value;
 
-            const msg = `*🪔 New Diwali Event Listing Request*\n\n` +
+            const msg = `*📥 New Event Listing Request*\n\n` +
                         `*Organizer:* ${org}\n` +
                         `*Mobile:* ${mob}\n` +
                         `*Event:* ${title}\n` +
