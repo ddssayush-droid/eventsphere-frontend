@@ -5,7 +5,8 @@
     <meta name="apple-mobile-web-app-title" content="EventSphere">
     <meta property="og:site_name" content="EventSphere">
     <meta property="og:title" content="EventSphere | Premium Event Tickets">
-    <meta property="og:url" content="https://www.eventsphere.info/">
+    <meta property="og:url" content="https://www.eventsphereind.in/">
+    <meta property="og:image" content="https://www.eventsphereind.in/logo.jpg">
     <meta property="og:type" content="website">
 
     <meta charset="UTF-8">
@@ -13,7 +14,7 @@
     <title>EventSphere | Premium Events At 0% Fees</title>
     
     <!-- Favicon & Logo for Google & Browsers -->
-    <link rel="icon" type="image/png" href="logo.jpg">
+    <link rel="icon" type="image/jpeg" href="logo.jpg">
     <link rel="apple-touch-icon" href="logo.jpg">
 
     <!-- Organization Schema for Google Logo Indexing -->
@@ -22,13 +23,13 @@
       "@context": "https://schema.org",
       "@type": "Organization",
       "name": "EventSphere",
-      "url": "https://www.eventsphere.info",
-      "logo": "https://www.eventsphere.info/logo.jpg"
+      "url": "https://www.eventsphereind.in",
+      "logo": "https://www.eventsphereind.in/logo.jpg"
     }
     </script>
 
     <!-- Razorpay Checkout Script -->
-    <script const RAZORPAY_KEY = "rzp_live_TG2UWr9VztqbAn";></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <style>
         /* ================= 🎬 ULTRA-PREMIUM BLACK & GOLD TICKET INTRO 🎬 ================= */
@@ -112,6 +113,8 @@
 
         /* ================= HEADER ================= */
         header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; position: sticky; top: 0; background: rgba(2, 2, 2, 0.92); backdrop-filter: blur(12px); z-index: 100; border-bottom: 1px solid rgba(212, 175, 55, 0.2); }
+        .brand { display: flex; align-items: center; gap: 8px; }
+        .brand img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1px solid var(--gold); }
         .brand h1 { margin: 0; font-size: 18px; font-weight: 900; background: linear-gradient(45deg, var(--gold-light), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px; }
         .header-right { display: flex; align-items: center; gap: 8px; }
         .city-select-btn, .my-tickets-top-btn { color: #fff; font-size: 11px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 4px; background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 20px; border: 1px solid rgba(212,175,55,0.3); }
@@ -313,7 +316,10 @@
 
     <!-- HEADER -->
     <header>
-        <div class="brand"><h1>EventSphere</h1></div>
+        <div class="brand">
+            <img src="logo.jpg" alt="EventSphere Logo">
+            <h1>EventSphere</h1>
+        </div>
         <div class="header-right">
             <div class="city-select-btn" onclick="openCityModal()">
                 <span id="selectedCityText">Ahmedabad</span> <small>▼</small>
@@ -374,11 +380,11 @@
     <!-- ================= PROFILE / BMS ACCOUNT VIEW ================= -->
     <div id="hostView" class="view-section">
         <div class="profile-container">
-            <div class="checkout-box" style="text-align: center; margin-bottom: 20px;">
+            <div class="checkout-box" id="profileAuthBox" style="text-align: center; margin-bottom: 20px;">
                 <div style="font-size: 32px; margin-bottom: 8px;">👤</div>
-                <h3 style="color:#fff; font-size:15px; margin-bottom: 4px;">Welcome to EventSphere</h3>
-                <p style="font-size: 11px; color:var(--text-muted); margin-bottom: 15px;">Login to manage your bookings and passes</p>
-                <button class="submit-btn" onclick="triggerOtpLoginModal()">Login / Register via WhatsApp OTP</button>
+                <h3 id="profileGreeting" style="color:#fff; font-size:15px; margin-bottom: 4px;">Welcome to EventSphere</h3>
+                <p id="profileSubtext" style="font-size: 11px; color:var(--text-muted); margin-bottom: 15px;">Login to manage your bookings and passes</p>
+                <button id="profileAuthBtn" class="submit-btn" onclick="triggerOtpLoginModal()">Login / Register via WhatsApp OTP</button>
             </div>
 
             <div class="checkout-box">
@@ -493,10 +499,14 @@
     <div id="otpModal" class="modal-overlay">
         <div class="modal-content-standard" style="max-width: 380px; text-align: left;">
             <div class="close-btn" onclick="closeModal('otpModal')">✕</div>
-            <div class="sheet-header" style="text-align: left; border:none; margin-bottom:4px;">Verify Mobile Number</div>
-            <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 15px;">We will send a 4-digit verification code via WhatsApp to proceed.</p>
+            <div class="sheet-header" style="text-align: left; border:none; margin-bottom:4px;">Verify Details</div>
+            <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 15px;">Enter your name and WhatsApp number to receive a 4-digit OTP.</p>
             
             <div id="phoneInputStep">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="userNameInput" placeholder="Enter your full name">
+                </div>
                 <div class="form-group">
                     <label>WhatsApp / Mobile Number</label>
                     <input type="tel" id="userMobileInput" placeholder="Enter 10-digit number" maxlength="10">
@@ -613,12 +623,52 @@
         let listEvents = []; 
         let sliderEvents = []; 
         let pendingCategoryData = null;
-        let userPhone = "";
-        let userName = "EventSphere User";
+        let userPhone = localStorage.getItem('es_user_phone') || "";
+        let userName = localStorage.getItem('es_user_name') || "";
+
+        function updateProfileUI() {
+            const isVerified = localStorage.getItem('es_user_verified');
+            const savedName = localStorage.getItem('es_user_name');
+            const savedPhone = localStorage.getItem('es_user_phone');
+            const greetingEl = document.getElementById('profileGreeting');
+            const subtextEl = document.getElementById('profileSubtext');
+            const authBtnEl = document.getElementById('profileAuthBtn');
+
+            if (isVerified && savedPhone) {
+                userName = savedName || "EventSphere User";
+                userPhone = savedPhone;
+                greetingEl.innerHTML = `${userName} <span style="color:var(--success); font-size:11px;">✔ Logged In</span>`;
+                subtextEl.innerText = `+91 ${userPhone}`;
+                authBtnEl.innerText = "Logout";
+                authBtnEl.style.background = "transparent";
+                authBtnEl.style.border = "1px solid var(--gold)";
+                authBtnEl.style.color = "var(--gold)";
+                authBtnEl.onclick = logoutUser;
+            } else {
+                greetingEl.innerText = "Welcome to EventSphere";
+                subtextEl.innerText = "Login to manage your bookings and passes";
+                authBtnEl.innerText = "Login / Register via WhatsApp OTP";
+                authBtnEl.style.background = "linear-gradient(90deg, #BF953F, #FCF6BA, #B38728)";
+                authBtnEl.style.border = "none";
+                authBtnEl.style.color = "#000";
+                authBtnEl.onclick = triggerOtpLoginModal;
+            }
+        }
+
+        function logoutUser() {
+            localStorage.removeItem('es_user_verified');
+            localStorage.removeItem('es_user_phone');
+            localStorage.removeItem('es_user_name');
+            userPhone = "";
+            userName = "";
+            updateProfileUI();
+            alert("Logged out successfully.");
+        }
 
         window.addEventListener('load', async () => {
             const savedCity = localStorage.getItem('es_city');
             if(savedCity) document.getElementById('selectedCityText').innerText = savedCity;
+            updateProfileUI();
 
             setTimeout(() => {
                 const splash = document.getElementById('splash-screen');
@@ -762,7 +812,7 @@
             document.getElementById('detailsModal').style.display = 'none'; 
             const event = globalEvents.find(e => e.id === eventId);
             const container = document.getElementById('ticketOptionsContainer');
-            const safeEventName = event.title.replace(/'/g, "\'");
+            const safeEventName = event.title.replace(/'/g, "\\'");
             const safeDate = event.date || "TBD";
             const safeTime = event.time || "TBD";
 
@@ -788,26 +838,32 @@
             const isVerified = localStorage.getItem('es_user_verified');
             if (isVerified) {
                 userPhone = localStorage.getItem('es_user_phone') || "9999999999";
+                userName = localStorage.getItem('es_user_name') || "EventSphere User";
                 openCheckoutView(pendingCategoryData.eventName, pendingCategoryData.price, pendingCategoryData.category, pendingCategoryData.date, pendingCategoryData.time, pendingCategoryData.eventId);
             } else {
-                document.getElementById('phoneInputStep').style.display = 'block';
-                document.getElementById('otpInputStep').style.display = 'none';
-                document.getElementById('userMobileInput').value = '';
-                document.getElementById('otpModal').style.display = 'flex';
+                triggerOtpLoginModal();
             }
         }
 
         async function sendOtpCode() {
+            const nameInput = document.getElementById('userNameInput');
             const mobInput = document.getElementById('userMobileInput');
-            if(!mobInput) {
-                alert("Mobile input field nahi mila!");
+            if(!nameInput || !mobInput) {
+                alert("Input fields nahi mile!");
                 return;
             }
+            const enteredName = nameInput.value.trim();
             const mob = mobInput.value.trim();
+
+            if(!enteredName) {
+                alert("Kripya apna poora naam enter karein!");
+                return;
+            }
             if(mob.length !== 10) {
                 alert("Kripya poora 10-digit mobile number enter karein!");
                 return;
             }
+            userName = enteredName;
             userPhone = mob;
 
             try {
@@ -844,16 +900,20 @@
                 const res = await fetch(`${BACKEND_URL}/verify-otp`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ phone: userPhone, otp: enteredOtp })
+                    body: JSON.stringify({ name: userName, phone: userPhone, otp: enteredOtp })
                 });
                 const data = await res.json();
 
                 if(data.success) {
                     localStorage.setItem('es_user_verified', 'true');
                     localStorage.setItem('es_user_phone', userPhone);
+                    localStorage.setItem('es_user_name', userName);
+                    updateProfileUI();
                     closeModal('otpModal');
                     if (pendingCategoryData) {
-                        openCheckoutView(pendingCategoryData.eventName, pendingCategoryData.price, pendingCategoryData.category, pendingCategoryData.date, pendingCategoryData.time, pendingCategoryData.eventId);
+                        const dataToOpen = pendingCategoryData;
+                        pendingCategoryData = null;
+                        openCheckoutView(dataToOpen.eventName, dataToOpen.price, dataToOpen.category, dataToOpen.date, dataToOpen.time, dataToOpen.eventId);
                     }
                 } else {
                     alert(data.message || 'Invalid OTP!');
@@ -866,7 +926,9 @@
         function triggerOtpLoginModal() {
             document.getElementById('phoneInputStep').style.display = 'block';
             document.getElementById('otpInputStep').style.display = 'none';
-            document.getElementById('userMobileInput').value = '';
+            document.getElementById('userNameInput').value = localStorage.getItem('es_user_name') || '';
+            document.getElementById('userMobileInput').value = localStorage.getItem('es_user_phone') || '';
+            document.getElementById('otpCodeInput').value = '';
             document.getElementById('otpModal').style.display = 'flex';
         }
 
@@ -1016,7 +1078,7 @@
                         await verifyPaymentOnBackend(response.razorpay_payment_id, finalTotal);
                     },
                     "prefill": {
-                        "name": userName,
+                        "name": userName || "EventSphere User",
                         "contact": userPhone
                     },
                     "theme": {
@@ -1039,6 +1101,7 @@
                         payment_id: paymentId,
                         event_name: chkState.eventName,
                         category: chkState.category,
+                        customer_name: userName,
                         customer_phone: userPhone,
                         date: `${chkState.date} | ${chkState.time}`,
                         amount: finalTotal
